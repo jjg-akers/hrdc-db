@@ -1,0 +1,31 @@
+<html>
+    <head>
+      <link rel="stylesheet" href="{{ url_for('static', filename = 'styles/main.css') }}">
+      {% if title %}
+      <title>{{ title }} - HRDC DB</title>
+      {% else %}
+      <title>Welcome to HRDC DB</title>
+      {% endif %}
+    </head>
+    <body>
+        <div class="row">
+            <a class="header_button" href="{{ url_for('index') }}">Home</a>
+            <a class="header_button" href="{{ url_for('register') }}">Create New User</a>
+        </div>
+
+        <div class="row">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            </div>
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </div>
+
+    </body>
+</html>
