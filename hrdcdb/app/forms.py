@@ -31,16 +31,20 @@ class RegistrationForm(FlaskForm):
 
 # These forms will need to be altered to match whatever schema I land on for the Client table.
 
-# class CreateClient(FlaskForm):
-# 	gender_list_choices = list(zip(lists.genders.keys(), lists.genders.values()))
-# 	race_choices = list(zip(lists.race.keys(), lists.race.values()))
-# 	military_status = list(zip(lists.military.keys(), lists.military.values()))
+class CreateClient(FlaskForm):
+	first_name = StringField('First Name')
+	middle_name = StringField('Middle Name')
+	last_name = StringField('Last Name')
+	SSN = StringField('Social Security #')
+	veteran = BooleanField('Veteran')
+	activeMil = BooleanField('Active Military')
+	disability = BooleanField('Disability')
+	foreignBorn = BooleanField('Foreign Born')
+	race = SelectField('Race', coerce = int, validators=[DataRequired()])
+	ethnicity = SelectField('Ethnicity', coerce = int, validators=[DataRequired()])
+	gender = SelectField('Gender', coerce = int, validators=[DataRequired()])
+	submit = SubmitField('Add Client')
 
-# 	name = StringField('Name', validators = [DataRequired()])
-# 	gender = SelectField('Gender', choices = gender_list_choices, coerce = int)
-# 	race = SelectField('Race', choices = race_choices, coerce = int)
-# 	military = SelectField('Military', choices = military_status, coerce = int)
-# 	submit = SubmitField('Add Client')
 
 
 # class FilterClients(FlaskForm):

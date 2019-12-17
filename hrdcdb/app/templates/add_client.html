@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Add Client</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <table>
+
+            <tr>
+                <th>{{ form.first_name.label }}</th>
+                <th>{{ form.middle_name.label }}</th>
+                <th>{{ form.last_name.label }}</th>
+                <th>{{ form.SSN.label }}</th>
+            </tr>
+
+            <tr>
+                <td>{{ form.first_name(size=32) }}</td>
+                <td>{{ form.middle_name(size=32) }}</td>
+                <td>{{ form.last_name(size=32) }}</td>
+                <td>{{ form.SSN(size=32) }}</td>
+            </tr>
+
+            <tr>
+                <td>
+                    {% for error in form.first_name.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for error in form.middle_name.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for error in form.last_name.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for error in form.SSN.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </td>
+            </tr>
+
+        </table>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}

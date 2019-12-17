@@ -8,6 +8,10 @@ from flask_login import UserMixin
 def load_user(id):
 	return User.query.get(int(id))
 
+################################################################################
+# User table defines the staff that will login and do data entry and reporting #
+################################################################################
+
 
 class User(UserMixin, db.Model):
 	id = db.Column(db.Integer, primary_key = True)
@@ -25,6 +29,10 @@ class User(UserMixin, db.Model):
 		return check_password_hash(self.password_hash, password)
 
 
+#################################################################################
+# The Client tables define demographic and family information about each client #
+#################################################################################
+
 class Client(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	first_name = db.Column(db.String(20))
@@ -33,21 +41,159 @@ class Client(db.Model):
 	SSN = db.Column(db.String(11))
 	veteran = db.Column(db.Boolean)
 	activeMilitary = db.Column(db.Boolean)
-	foreignBorn = db.Column(db.ForeignBorn)
-	race = db.relationship('ClientRace', backref = 'Client Race', lazy = 'dynamic')
+	disability = db.Column(db.Boolean)
+	foreignBorn = db.Column(db.Boolean)
+	race = db.relationship('ClientRace', backref = 'Client', lazy = 'dynamic')
 	ethnicity = db.Column(db.Integer, db.ForeignKey('ethnicity.id'))
+	gender = db.Column(db.Integer, db.ForeignKey('gender.id'))
+
+
+class ClientRelationship(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	client_a_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+	client_b_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+	a_to_b_relation = db.Column(db.Integer, db.ForeignKey('relationship.id'))
+
+
+class Relationship(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	relationship = db.Column(db.String(15))
+
+	def __repr__(self):
+		return '<Relationship Type {}>'.format(self.relationship)
+
+
+class ClientContact(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+	contact = db.Column(db.String(50))
+	contact_type = db.Column(db.Integer, db.ForeignKey('contact_type.id'))
+
+
+class ContactType(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	contact_type = db.Column(db.String(10))
+
+	def __repr__(self):
+		return '<Contact Type {}>'.format(self.contact_type)
+
+
+class ClientAddress(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	address = db.Column(db.String(50))
+	zipcode = db.Column(db.Integer)
+	start_date = db.Column(db.DateTime)
+	end_date = db.Column(db.DateTime)
+	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+
+
+class Gender(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	gender = db.Column(db.String(10))
+
+	def __repr__(self):
+		return '<Gender {}>'.format(self.gender)
+
 
 class Ethnicity(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	ethnicity = db.Column(db.String(30))
 
+	def __repr__(self):
+		return '<Ethnicity {}>'.format(self.ethnicity)
 
 class Race(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	race = db.Column(db.String(40))
+
+	def __repr__(self):
+		return '<Race {}>'.format(self.race)
 
 
 class ClientRace(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
 	race_id = db.Column(db.Integer, db.ForeignKey('race.id'))
+
+
+####################################################################################
+# The Program and Service tables define how services are tracked across the agency #
+####################################################################################
+
+
+# class Service(db.Model):
+# 	id = db.Column(db.Integer, primary_key = True)
+# 	service_type = db.Column(db.Integer, db.ForeignKey('servicetype.id'))
+# 	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+# 	program_id = db.Column(db.Integer, db.ForeignKey('program.id'))
+# 	entered_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+# 	begin_date = db.Column(db.DateTime)
+# 	end_date = db.Column(db.DateTime)
+
+
+# class Program(db.Model):
+# 	id = db.Column(db.Integer, primary_key = True)
+# 	name = db.Column(db.String(20))
+
+
+# class ServiceType(db.Model):
+# 	id = db.Column(db.Integer, primary_key = True)
+# 	name = db.Column(db.String(50))
+
+
+# class ProgramServiceType(db.Model):
+# 	id = db.Column(db.Integer, primary_key = True)
+# 	program_id = db.Column(db.Integer, db.ForeignKey('program.id'))
+# 	service_type_id = db.Column(db.Integer, db.ForeignKey('servicetype.id'))
+
+
+##########################################################
+# The Assessment tables track client status and outcomes #
+##########################################################
+
+
+# class Assessment(db.Model):
+# 	id = db.Column(db.Integer, primary_key = True)
+# 	assessment_type = db.Column(db.Integer, db.ForeignKey('assessmenttype.id'))
+# 	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+# 	program_id = db.Column(db.Integer, db.ForeignKey('program.id'))
+# 	user_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+# 	assessment_date = db.Column(db.DateTime)
+
+
+# class FinancialAssessment(db.Model):
+# 	id = db.Column(db.Integer, primary_key = True)
+# 	income = db.relationship('Income', backref = 'Assessment', lazy = 'dynamic')
+
+
+# class IncomeType(db.Model):
+# 	id = db.Column(db.Integer, primary_key = True)
+# 	income_type = db.Column(db.String(30))
+
+
+# class IncomeAssessment(db.Model):
+# 	id = db.Column(db.Integer, primary_key = True)
+# 	income_type_id = db.Column(db.Integer, db.ForeignKey('incometype.id'))
+# 	assessment_id = db.Column(db.Integer, db.ForeignKey('assessment.id'))
+# 	amount = db.Column(db.Integer)
+
+
+# class HousingAssessment(db.Model):
+# 	id = db.Column(db.Integer, primary_key = True)
+# 	# This will be filled in with columns that represent housing assessment questions
+
+
+# class OutcomeMatrix(db.Model):
+# 	id = db.Column(db.Integer, primary_key = True)
+# 	# This will be filled in with columns for each outcome matrix domain
+
+
+# class NonCashBenefits(db.Model):
+# 	id = db.Column(db.Integer, primary_key = True)
+# 	benefit = db.Column(db.String(20))
+
+
+# class ClientNCBs(db.Model):
+# 	id = db.Column(db.Integer, primary_key = True)
+# 	assessment = db.Column(db.Integer, db.ForeignKey('assessment.id'))
+# 	benefit_id = db.Column(db.Integer, db.ForeignKey('noncashbenefits.id'))
