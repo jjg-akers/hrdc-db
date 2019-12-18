@@ -47,6 +47,9 @@ class Client(db.Model):
 	ethnicity = db.Column(db.Integer, db.ForeignKey('ethnicity.id'))
 	gender = db.Column(db.Integer, db.ForeignKey('gender.id'))
 
+	def __repr__(self):
+		return '<{} {}>'.format(self.first_name,self.last_name)
+
 
 class ClientRelationship(db.Model):
 	id = db.Column(db.Integer, primary_key = True)

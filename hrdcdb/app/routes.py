@@ -8,6 +8,7 @@ from app.models import User, Client, ClientRelationship,\
 					   ContactType, ClientAddress,\
 					   Gender, Ethnicity, Race, ClientRace
 
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -31,25 +32,16 @@ def register():
 
 @app.route('/create_client', methods = ['GET','POST'])
 def create_client():
-	race_choices = [(r.id, r.race) for r in Race.query.all()]
-	ethn_choices = [(e.id, e.ethnicity) for e in Ethnicity.query.all()]
-	gender_choices = [(g.id, g.gender) for g in Gender.query.all()]
 	form = CreateClient()
-	form.race.choices = race_choices
-	form.ethnicity.choices = ethn_choices
-	form.gender.choices = gender_choices
 	if form.validate_on_submit():
-		# Add the client to the Client table
-		client = Client(first_name = form.first_name,
-						middle_name = form.middle_name,
-						last_name = form.last_name,
-						SSN = form.SSN,
-						veteran = form.veteran,
-						activeMilitary = form.activeMil,
-						foreignBorn = form.foreignBorn,
-						race = form.race,
-						ethnicity = form.ethnicity,
-						gender = form.gender)
-		db.session.add(client)
-		db.session.commit()
+		form.execute_transaction()
 	return render_template('add_client.html', title = 'Add Client', form = form)
+
+
+@app.route('/<form>_form', methods = ['GET', 'POST'])
+def render_form(form):
+	form_class = globals()[form]
+	instance = form_class()
+	if instance.validate_on_submit():
+		instance.execute_transaction()
+	return render_template('form_view.html', title = instance.form_title, form = instance)

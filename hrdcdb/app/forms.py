@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField, FieldList, FormField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Optional
-from app.models import User
+from app.models import User, Race, Ethnicity, Gender, Client, ClientRace
+from app import db
 
 class LoginForm(FlaskForm):
 	username = StringField('Username', validators = [DataRequired()])
@@ -32,18 +33,42 @@ class RegistrationForm(FlaskForm):
 # These forms will need to be altered to match whatever schema I land on for the Client table.
 
 class CreateClient(FlaskForm):
-	first_name = StringField('First Name')
-	middle_name = StringField('Middle Name')
-	last_name = StringField('Last Name')
+	form_title = 'Create New Client'
+
+	first_name = StringField('First Name', validators=[DataRequired()])
+	middle_name = StringField('Middle Name', validators=[DataRequired()])
+	last_name = StringField('Last Name', validators=[DataRequired()])
 	SSN = StringField('Social Security #')
 	veteran = BooleanField('Veteran')
 	activeMil = BooleanField('Active Military')
 	disability = BooleanField('Disability')
 	foreignBorn = BooleanField('Foreign Born')
-	race = SelectField('Race', coerce = int, validators=[DataRequired()])
-	ethnicity = SelectField('Ethnicity', coerce = int, validators=[DataRequired()])
-	gender = SelectField('Gender', coerce = int, validators=[DataRequired()])
+
+	race_choices = [(r.id, r.race) for r in Race.query.all()]
+	ethn_choices = [(e.id, e.ethnicity) for e in Ethnicity.query.all()]
+	gender_choices = [(g.id, g.gender) for g in Gender.query.all()]
+	race = SelectField('Race', choices = race_choices, coerce = int, validators=[DataRequired()])
+	ethnicity = SelectField('Ethnicity', choices = ethn_choices, coerce = int, validators=[DataRequired()])
+	gender = SelectField('Gender', choices = gender_choices, coerce = int, validators=[DataRequired()])
+
+
 	submit = SubmitField('Add Client')
+
+	def execute_transaction(self):
+		client = Client(first_name = self.first_name.data,
+						middle_name = self.middle_name.data,
+						last_name = self.last_name.data,
+						SSN = self.SSN.data,
+						veteran = self.veteran.data,
+						activeMilitary = self.activeMil.data,
+						foreignBorn = self.foreignBorn.data,
+						ethnicity = self.ethnicity.data,
+						gender = self.gender.data)
+		db.session.add(client)
+		db.session.commit()
+		clientRace = ClientRace(client_id = client.id, race_id = self.race.data)
+		db.session.add(clientRace)
+		db.session.commit()
 
 
 

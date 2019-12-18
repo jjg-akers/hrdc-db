@@ -12,17 +12,19 @@ body {
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  width: 100%;
 }
 
-td, th {
+td {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
 }
 
-tr:nth-child(even) {
+th {
+  border: 1px solid #dddddd;
   background-color: #98c23d;
+  text-align: left;
+  padding: 8px;
 }
 
 .row:after {
@@ -30,6 +32,36 @@ tr:nth-child(even) {
     display: table;
     clear: both;
 }
+
+.formElement{
+    float: left;
+    padding: 20px 20px;
+    border: solid;
+    width: 45%;
+}
+
+.leftColumn {
+  float: left;
+  width: 15%;
+}
+
+.rightColumn{
+  float: right;
+  width: 80%;
+}
+
+
+.submitField{
+  float: left;
+  padding: 20px 20px;
+  border: solid;
+  clear: both;
+}
+
+.formFields{
+  float: center;
+}
+
 
 .header_button{
     color: #9ca6b7;
@@ -40,6 +72,6 @@ tr:nth-child(even) {
     text-decoration: none;
     cursor: pointer;
     display: inline;
-    width: 15%;
+    width: 100%;
     float: left;
 }

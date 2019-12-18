@@ -3,6 +3,7 @@ from app.models import User, Client, ClientRelationship,\
 					   Relationship, ClientContact,\
 					   ContactType, ClientAddress,\
 					   Gender, Ethnicity, Race, ClientRace
+from app.forms import CreateClient
 
 @app.shell_context_processor
 def make_shell_context():
