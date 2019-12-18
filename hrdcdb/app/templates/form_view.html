@@ -8,8 +8,11 @@
         {% for field in form %}
             {% if ((field.type != 'CSRFTokenField') and (field.type != 'SubmitField')) %}
             <div class="formElement">
-                {{ field.label() }}
-                {{ field() }}
+                <strong>{{ field.label() }}:</strong>
+                {{ field() }} <br>
+                {% for error in field.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
             </div>
             {% endif %}
         {% endfor %}

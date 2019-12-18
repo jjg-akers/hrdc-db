@@ -34,10 +34,11 @@ th {
 }
 
 .formElement{
-    float: left;
     padding: 20px 20px;
-    border: solid;
-    width: 45%;
+    background: #98c23d;
+    margin: 1em 0;
+    box-shadow: 1px 2px 3px rgba(0,0,0,.5);
+    border-radius: 10px;
 }
 
 .leftColumn {
@@ -60,6 +61,11 @@ th {
 
 .formFields{
   float: center;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-around;
+  justify-content: space-around;
 }
 
 

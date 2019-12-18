@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField, FieldList, FormField
-from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Optional
+from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Optional, Regexp
 from app.models import User, Race, Ethnicity, Gender, Client, ClientRace
 from app import db
 
@@ -12,6 +12,8 @@ class LoginForm(FlaskForm):
 
 
 class RegistrationForm(FlaskForm):
+	form_title = 'Create New User'
+
 	username = StringField('Username', validators = [DataRequired()])
 	email = StringField('Email', validators = [DataRequired(), Email()])
 	password = PasswordField('Password', validators = [DataRequired()])
@@ -29,6 +31,12 @@ class RegistrationForm(FlaskForm):
 		if user is not None:
 			raise ValidationError('Please use a different email address.')
 
+	def execute_transaction(self):
+		user = User(username = form.username.data, email = form.email.data)
+		user.set_password(form.password.data)
+		db.session.add(user)
+		db.session.commit()
+
 
 # These forms will need to be altered to match whatever schema I land on for the Client table.
 
@@ -38,7 +46,10 @@ class CreateClient(FlaskForm):
 	first_name = StringField('First Name', validators=[DataRequired()])
 	middle_name = StringField('Middle Name', validators=[DataRequired()])
 	last_name = StringField('Last Name', validators=[DataRequired()])
-	SSN = StringField('Social Security #')
+
+	ssn_regex = '^(?!(000|666|9))\\d{3}-(?!00)\\d{2}-(?!0000)\\d{4}$'
+	SSN = StringField('Social Security #', validators = [DataRequired(),
+														 Regexp(ssn_regex, message = 'Invalid Social Security Number')])
 	veteran = BooleanField('Veteran')
 	activeMil = BooleanField('Active Military')
 	disability = BooleanField('Disability')
@@ -53,6 +64,11 @@ class CreateClient(FlaskForm):
 
 
 	submit = SubmitField('Add Client')
+
+	def validate_SSN(self, SSN):
+		client = Client.query.filter_by(SSN = SSN.data).first()
+		if client is not None:
+			raise ValidationError('A client already exists with that SSN')
 
 	def execute_transaction(self):
 		client = Client(first_name = self.first_name.data,

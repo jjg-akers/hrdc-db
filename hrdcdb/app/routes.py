@@ -44,4 +44,5 @@ def render_form(form):
 	instance = form_class()
 	if instance.validate_on_submit():
 		instance.execute_transaction()
+		return redirect(url_for('render_form', form = form))
 	return render_template('form_view.html', title = instance.form_title, form = instance)

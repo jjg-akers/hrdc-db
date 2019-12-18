@@ -9,8 +9,12 @@ This is my project to create an alternative to CaseWorthy. I'm going to use Pyth
   - Form validation
     - Duplicate Check
     - SSN formatting
+      - ~~Check against existing entries~~
+      - ~~Check for correct formatting~~
+      - Allow partial ssns
+    - Extra form field descriptions
   - Formatting
-    - Build generic form rendering template
+    - ~~Build generic form rendering template~~
 - Client search functionality
 - Build forms for other tables
   - Relationship
@@ -28,6 +32,7 @@ This is my project to create an alternative to CaseWorthy. I'm going to use Pyth
   - Dashboard
 - Reporting
   - Integrate pandas/seaborn
+- Migrate data from CaseWorthy
 
 ## Future Future To-Dos:
 
