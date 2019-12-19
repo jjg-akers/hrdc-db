@@ -1,6 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
+	<div class="formFields">
+		<div class="formElement">
+			<table class="contactInfo">
+				<tr>
+					<th>Contact</th>
+					<th>Type</th>
+				</tr>
+		{% for c in contact_info %}
+				<tr>
+					<td>{{ c.contact }}</td>
+					<td>{{ c.contact_type}}</td>
+				</tr>
+		{% endfor%}
+			</table>
+	</div>
     <form action="" method="post">
         {{ form.hidden_tag() }}
 

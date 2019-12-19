@@ -2,11 +2,8 @@ from flask import render_template, flash, redirect, url_for, request
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
-from app.forms import RegistrationForm, CreateClient
-from app.models import User, Client, ClientRelationship,\
-					   Relationship, ClientContact,\
-					   ContactType, ClientAddress,\
-					   Gender, Ethnicity, Race, ClientRace
+from app.forms import *
+from app.models import *
 
 
 @app.route('/')
@@ -46,3 +43,38 @@ def render_form(form):
 		instance.execute_transaction()
 		return redirect(url_for('render_form', form = form))
 	return render_template('form_view.html', title = instance.form_title, form = instance)
+
+
+@app.route('/find_clients', methods = ['GET', 'POST'])
+def view_clients():
+	form = FilterClients()
+	if form.validate_on_submit():
+		clients = Client.query
+		if form.first_name.data:
+			clients = clients.filter(Client.first_name.like('%{}%'.format(form.first_name.data)))
+		if form.last_name.data:
+			clients = clients.filter(Client.last_name.like('%{}%'.format(form.last_name.data)))
+		return render_template('search_results.html', title = 'Search Results', form = form, clients = clients)
+	return render_template('search_results.html', title = 'Client Search', form = form)
+
+
+@app.route('/client_<clientid>_dashboard')
+def client_dashboard(clientid):
+	client = Client.query.filter(Client.id == clientid).first()
+	return render_template('client_dashboard.html', 
+							title = '{} {} Dashboard'.format(client.first_name, client.last_name),
+							client = client)
+
+
+@app.route('/client_<clientid>_contact', methods = ['GET', 'POST'])
+def create_contact(clientid):
+	form = CreateClientContact()
+	contact_info = ClientContact.query.filter(ClientContact.client_id == clientid).all()
+	if form.validate_on_submit():
+		new_contact = ClientContact(client_id = clientid,
+									contact = form.contact_info.data,
+									contact_type = form.contact_type.data)
+		db.session.add(new_contact)
+		db.session.commit()
+		return redirect(url_for('create_contact', clientid = clientid))
+	return render_template('create_contact.html', title = 'Create Contact', form = form, contact_info = contact_info)

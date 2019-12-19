@@ -1,7 +1,8 @@
+from flask import redirect, url_for
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField, FieldList, FormField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Optional, Regexp
-from app.models import User, Race, Ethnicity, Gender, Client, ClientRace
+from app.models import *
 from app import db
 
 class LoginForm(FlaskForm):
@@ -88,10 +89,36 @@ class CreateClient(FlaskForm):
 
 
 
-# class FilterClients(FlaskForm):
-# 	gender_list_choices = list(zip(lists.genders.keys(), lists.genders.values()))
-# 	race_choices = list(zip(lists.race.keys(), lists.race.values()))
-# 	military_status = list(zip(lists.military.keys(), lists.military.values()))
+class FilterClients(FlaskForm):
+	form_title = 'Search For Client'
+
+	first_name = StringField('First Name')
+	middle_name = StringField('Middle Name')
+	last_name = StringField('Last Name')
+	SSN = StringField('Social Security #')
+
+	exact_match = BooleanField('Require Exact Match')
+	submit = SubmitField('Find Client')
+
+
+class CreateClientContact(FlaskForm):
+	form_title = 'Add Contact Information'
+
+	contact_info = StringField('Contact Information', validators = [DataRequired()])
+	contact_choices = [(c.id, c.contact_type) for c in ContactType.query.all()]
+	contact_type = SelectField('Contact Type', coerce = int, choices = contact_choices, validators = [DataRequired()])
+
+	submit = SubmitField('Add Contact Information')
+
+	def execute_transaction(clientid):
+		new_contact = ClientContact(client_id = clientid,
+									contact = self.contact_info.data,
+									contact_type = self.contact_type.data)
+		db.session.add(new_contact)
+		db.session.commit()
+
+
+
 
 # 	name = StringField('Name')
 # 	gender = SelectField('Gender', choices = gender_list_choices, validators = [Optional()], coerce = int)

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="headerBar">{{ client.first_name }} {{ client.last_name }}</div>
+    <div class="formFields">
+        <div class="formElement">
+            <h2>Contact Info</h2>
+            <a href="{{ url_for('create_contact', clientid = client.id)}}" class="button">Edit Contact Information</a>
+        </div>
+        <div class="formElement">
+            <h2>Address Info</h2>
+        </div> 
+    </div>
+    <div class="formFields">       
+        <div class="formElement">
+            <h2>Services</h2>
+        </div>
+        <div class="formElement">
+            <h2>Assessments</h2>
+        </div>
+    </div>
+{% endblock %}
