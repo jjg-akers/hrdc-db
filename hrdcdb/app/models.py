@@ -101,6 +101,7 @@ class Gender(db.Model):
 class Ethnicity(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	ethnicity = db.Column(db.String(30))
+	client = db.relationship('Client', backref = 'Ethnicity', lazy = 'dynamic')
 
 	def __repr__(self):
 		return '<Ethnicity {}>'.format(self.ethnicity)
