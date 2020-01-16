@@ -16,6 +16,7 @@ This is my project to create an alternative to CaseWorthy. I'm going to use Pyth
   - Formatting
     - ~~Build generic form rendering template~~
 - Client search functionality
+  - What are best practices?
 - Build forms for other tables
   - Relationship
   - ClientContact
@@ -44,4 +45,6 @@ This is my project to create an alternative to CaseWorthy. I'm going to use Pyth
   - Self-Host
 - Automatic form filler
   - ServicePoint is a potential pilot
+  - See form-filler repo for more on this
+    - Prototype of HF HUD counseling data entry is live
 - Testing
