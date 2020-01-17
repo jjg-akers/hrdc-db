@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+
+        <div class="formFields">
+        {% for field in form %}
+            {% if ((field.type != 'CSRFTokenField') and (field.type != 'SubmitField')) %}
+            <div class="formElement">
+                {{ field.label() }}
+                {{ field() }} <br>
+                {% for error in field.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endfor %}
+        </div>
+
+        <div class="submitField">
+        {{ form.submit() }}
+        </div>
+    </form>
+    {% if data %}
+        <table class="clientView">
+        <tr>
+            <th>Client A</th>
+            <th>Client B</th>
+            <th>Relationship</th>
+        </tr>
+        {% for r in rels %}
+        <tr>
+            <td>{{ r.client_a_id }}</td>
+            <td>{{ r.client_b_id }}</td>
+            <td>{{ r.a_to_b_relation }}</td>
+        </tr>
+        {% endfor%}
+    </table>
+    {% endif %}
+{% endblock %}

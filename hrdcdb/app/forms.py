@@ -33,13 +33,11 @@ class RegistrationForm(FlaskForm):
 			raise ValidationError('Please use a different email address.')
 
 	def execute_transaction(self):
-		user = User(username = form.username.data, email = form.email.data)
-		user.set_password(form.password.data)
+		user = User(username = self.username.data, email = self.email.data)
+		user.set_password(self.password.data)
 		db.session.add(user)
 		db.session.commit()
 
-
-# These forms will need to be altered to match whatever schema I land on for the Client table.
 
 class CreateClient(FlaskForm):
 	form_title = 'Create New Client'
@@ -88,7 +86,6 @@ class CreateClient(FlaskForm):
 		db.session.commit()
 
 
-
 class FilterClients(FlaskForm):
 	form_title = 'Search For Client'
 
@@ -118,10 +115,25 @@ class CreateClientContact(FlaskForm):
 		db.session.commit()
 
 
+class CreateRelationship(FlaskForm):
+	form_title = 'Create Relationship'
+
+	client_choices = [(c.id, str(c.first_name)+' '+str(c.last_name)) for c in Client.query.all()]
+	rel_choices = [(r.id, r.relationship) for r in Relationship.query.all()]
+
+	first_client = SelectField('First Client', choices = client_choices, coerce = int, validators=[DataRequired()])
+	second_client = SelectField('Second Client', choices = client_choices, coerce = int, validators=[DataRequired()])
+	relationship = SelectField('Relationship', choices = rel_choices, coerce = int, validators = [DataRequired()])
+
+	def validate(self):
+		if not FlaskForm.validate(self):
+			return False
+		if self.first_client.data == self.second_client.data:
+			self.second_client.errors.append('Must be two different clients')
+			return False
+		else:
+			return True
+
+	submit = SubmitField('Add Relationship')
 
 
-# 	name = StringField('Name')
-# 	gender = SelectField('Gender', choices = gender_list_choices, validators = [Optional()], coerce = int)
-# 	race = SelectField('Race', choices = race_choices, validators = [Optional()], coerce = int)
-# 	military = SelectField('Military', choices = military_status, validators = [Optional()], coerce = int)
-# 	submit = SubmitField('Filter Results')

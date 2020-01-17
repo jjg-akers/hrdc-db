@@ -8,15 +8,18 @@
             <a href="{{ url_for('create_contact', clientid = client.id)}}" class="button">Edit Contact Information</a>
         </div>
         <div class="formElement">
-            <h2>Address Info</h2>
+            <h2>Family Information</h2>
+            <a href="{{ url_for('create_relationship', clientid = client.id)}}" class="button">Add Relationship</a>
         </div> 
     </div>
     <div class="formFields">       
         <div class="formElement">
             <h2>Services</h2>
+            <a href="{{ url_for('create_contact', clientid = client.id)}}" class="button">Add new service</a>
         </div>
         <div class="formElement">
             <h2>Assessments</h2>
+            <a href="{{ url_for('create_contact', clientid = client.id)}}" class="button">Add new assessment</a>
         </div>
     </div>
 {% endblock %}

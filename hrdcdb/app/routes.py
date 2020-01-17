@@ -78,3 +78,20 @@ def create_contact(clientid):
 		db.session.commit()
 		return redirect(url_for('create_contact', clientid = clientid))
 	return render_template('create_contact.html', title = 'Create Contact', form = form, contact_info = contact_info)
+
+
+@app.route('/create_relationship_<clientid>', defaults = {'second_client':None}, methods = ['GET','POST'])
+@app.route('/create_relationship_<clientid>_<second_client>', methods = ['GET','POST'])
+def create_relationship(clientid, second_client):
+	form = CreateRelationship()
+	a = ClientRelationship.query.filter(ClientRelationship.client_a_id == clientid).all()
+	b = ClientRelationship.query.filter(ClientRelationship.client_b_id == clientid).all()
+	rels = list(set().union(a,b))
+	if form.validate_on_submit():
+		rel = ClientRelationship(client_a_id = form.first_client.data,
+								 client_b_id = form.second_client.data,
+								 a_to_b_relation = form.relationship.data)
+		db.session.add(rel)
+		db.session.commit()
+		return redirect(url_for('create_relationship', clientid = clientid))
+	return render_template('create_relationship.html', title = 'Create Relationship', data = rels, form = form)	

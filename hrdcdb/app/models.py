@@ -106,6 +106,7 @@ class Ethnicity(db.Model):
 	def __repr__(self):
 		return '<Ethnicity {}>'.format(self.ethnicity)
 
+
 class Race(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	race = db.Column(db.String(40))

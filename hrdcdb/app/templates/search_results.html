@@ -25,6 +25,7 @@
             <th>Last Name</th>
             <th>Gender</th>
             <th>Veteran Status</th>
+            <th>Go to Dashboard</th>
         </tr>
         {% for c in clients %}
         <tr>
@@ -33,6 +34,7 @@
             <td>{{ c.last_name }}</td>
             <td>{{ c.gender }}</td>
             <td>{{ c.veteran }}</td>
+            <td><a href="{{ url_for('client_dashboard', clientid = c.id)}}">Dashboard</a></td>
         </tr>
         {% endfor%}
     </table>
