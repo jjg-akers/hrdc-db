@@ -56,6 +56,9 @@ class ClientRelationship(db.Model):
 	client_a_id = db.Column(db.Integer, db.ForeignKey('client.id'))
 	client_b_id = db.Column(db.Integer, db.ForeignKey('client.id'))
 	a_to_b_relation = db.Column(db.Integer, db.ForeignKey('relationship.id'))
+	relationship = db.relationship('Relationship', uselist=False)
+	client_a = db.relationship('Client', foreign_keys=[client_a_id])
+	client_b = db.relationship('Client', foreign_keys=[client_b_id])
 
 
 class Relationship(db.Model):
