@@ -47,6 +47,18 @@ th {
     margin: 1em 0;
 }
 
+.formFields{
+  float: left;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-around;
+  justify-content: space-evenly;
+  background: #6EACE7;
+  margin: 1em 0;
+  box-shadow: 1px 2px 3px rgba(0,0,0,.5);
+  border-radius: 5px;
+}
+
 .leftColumn {
   float: left;
   width: 15%;
@@ -68,19 +80,7 @@ th {
   clear: both;
 }
 
-.formFields{
-  float: center;
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: space-around;
-  justify-content: space-evenly;
-  background: #6EACE7;
-  margin: 1em 0;
-  box-shadow: 1px 2px 3px rgba(0,0,0,.5);
-  border-radius: 5px;
 
-}
 
 .wigetContainer{
   display: flex;

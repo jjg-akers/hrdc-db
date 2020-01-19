@@ -32,9 +32,9 @@
         </tr>
         {% for r in data %}
         <tr>
-            <td>{{ r.client_a_id }}</td>
-            <td>{{ r.client_b_id }}</td>
-            <td>{{ r.a_to_b_relation }}</td>
+            <td>{{ r.client_a.first_name }} {{ r.client_a.last_name }}</td>
+            <td>{{ r.client_b.first_name }} {{ r.client_b.last_name }}</td>
+            <td>{{ r.relationship.relationship }}</td>
         </tr>
         {% endfor%}
     </table>

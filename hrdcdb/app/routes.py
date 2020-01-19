@@ -61,9 +61,14 @@ def view_clients():
 @app.route('/client_<clientid>_dashboard')
 def client_dashboard(clientid):
 	client = Client.query.filter(Client.id == clientid).first()
+	a = ClientRelationship.query.filter(ClientRelationship.client_a_id == clientid).all()
+	b = ClientRelationship.query.filter(ClientRelationship.client_b_id == clientid).all()
+	relations = list(set().union(a,b))
+
+	contact_info = ClientContact.query.filter(ClientContact.client_id == clientid).all()
 	return render_template('client_dashboard.html', 
 							title = '{} {} Dashboard'.format(client.first_name, client.last_name),
-							client = client)
+							client = client, relations = relations, contact_info = contact_info)
 
 
 @app.route('/client_<clientid>_contact', methods = ['GET', 'POST'])
@@ -95,3 +100,15 @@ def create_relationship(clientid, second_client):
 		db.session.commit()
 		return redirect(url_for('create_relationship', clientid = clientid))
 	return render_template('create_relationship.html', title = 'Create Relationship', data = rels, form = form)	
+
+
+@app.route('/edit_client_<clientid>', methods = ['GET','POST'])
+def edit_client(clientid):
+	client = Client.query.filter(Client.id == clientid).first()
+	data = client.__dict__
+	del data['_sa_instance_state']
+	data['activeMil'] = data['activeMilitary']
+	del data['activeMilitary']
+	form = EditClient(data = data)
+
+	return render_template('form_view.html', form = form)

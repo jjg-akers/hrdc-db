@@ -1,18 +1,51 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="headerBar">{{ client.first_name }} {{ client.last_name }}</div>
+    <div class="formFields">
+        <div class="formElement">Client Name: {{ client.first_name }} {{ client.last_name }}</div>
+        <div class="formElement"></div>
+        <div class="formElement"><a href="{{ url_for('edit_client', clientid = client.id)}}" class="button">Edit Client Demographics</a></div>
+    </div>
+
+
     <div class="formFields">
         <div class="formElement">
-            <h2>Contact Info</h2>
+            {% if contact_info %}
+            <table class="contactInfo">
+                <tr>
+                    <th>Contact</th>
+                    <th>Type</th>
+                </tr>
+                {% for c in contact_info %}
+                <tr>
+                    <td>{{ c.contact }}</td>
+                    <td>{{ c.ContactType.contact_type }}</td>
+                </tr>
+                {% endfor%}
+            </table>
+            {% endif %}
             <a href="{{ url_for('create_contact', clientid = client.id)}}" class="button">Edit Contact Information</a>
         </div>
         <div class="formElement">
             <h2>Family Information</h2>
+            {% if relations %}
+            <table class="clientView">
+                <tr>
+                    <th>Client A</th>
+                    <th>Client B</th>
+                    <th>Relationship</th>
+                </tr>
+                {% for r in relations %}
+                <tr>
+                    <td>{{ r.client_a.first_name }} {{ r.client_a.last_name }}</td>
+                    <td>{{ r.client_b.first_name }} {{ r.client_b.last_name }}</td>
+                    <td>{{ r.relationship.relationship }}</td>
+                </tr>
+                {% endfor%}
+            </table>
+            {% endif %}
             <a href="{{ url_for('create_relationship', clientid = client.id)}}" class="button">Add Relationship</a>
-        </div> 
-    </div>
-    <div class="formFields">       
+        </div>       
         <div class="formElement">
             <h2>Services</h2>
             <a href="{{ url_for('create_contact', clientid = client.id)}}" class="button">Add new service</a>

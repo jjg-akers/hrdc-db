@@ -27,6 +27,14 @@ Gender.query.delete()
 ContactType.query.delete()
 Relationship.query.delete()
 
+
+# Uncomment this section to drop all client data
+Client.query.delete()
+ClientRelationship.query.delete()
+ClientAddress.query.delete()
+ClientContact.query.delete()
+ClientRace.query.delete()
+
 db.session.commit()
 
 for r in race_list:

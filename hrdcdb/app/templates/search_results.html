@@ -32,7 +32,7 @@
             <td>{{ c.id }}</td>
             <td>{{ c.first_name }}</td>
             <td>{{ c.last_name }}</td>
-            <td>{{ c.gender }}</td>
+            <td>{{ c.gen.gender }}</td>
             <td>{{ c.veteran }}</td>
             <td><a href="{{ url_for('client_dashboard', clientid = c.id)}}">Dashboard</a></td>
         </tr>

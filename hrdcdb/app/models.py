@@ -46,6 +46,8 @@ class Client(db.Model):
 	race = db.relationship('ClientRace', backref = 'Client', lazy = 'dynamic')
 	ethnicity = db.Column(db.Integer, db.ForeignKey('ethnicity.id'))
 	gender = db.Column(db.Integer, db.ForeignKey('gender.id'))
+	gen = db.relationship('Gender', uselist = False)
+
 
 	def __repr__(self):
 		return '<{} {}>'.format(self.first_name,self.last_name)
@@ -74,6 +76,7 @@ class ClientContact(db.Model):
 	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
 	contact = db.Column(db.String(50))
 	contact_type = db.Column(db.Integer, db.ForeignKey('contact_type.id'))
+	ContactType = db.relationship('ContactType', uselist = False)
 
 
 class ContactType(db.Model):

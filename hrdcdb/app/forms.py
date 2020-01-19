@@ -1,5 +1,6 @@
 from flask import redirect, url_for
 from flask_wtf import FlaskForm
+from wtforms.fields.html5 import DateField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField, FieldList, FormField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Optional, Regexp
 from app.models import *
@@ -43,12 +44,12 @@ class CreateClient(FlaskForm):
 	form_title = 'Create New Client'
 
 	first_name = StringField('First Name', validators=[DataRequired()])
-	middle_name = StringField('Middle Name', validators=[DataRequired()])
+	middle_name = StringField('Middle Name')
 	last_name = StringField('Last Name', validators=[DataRequired()])
 
+	dob = DateField('Date of Birth', format='%m/%d/%Y')
 	ssn_regex = '^(?!(000|666|9))\\d{3}-(?!00)\\d{2}-(?!0000)\\d{4}$'
-	SSN = StringField('Social Security #', validators = [DataRequired(),
-														 Regexp(ssn_regex, message = 'Invalid Social Security Number')])
+	SSN = StringField('Social Security #', validators = [Regexp(ssn_regex, message = 'Invalid Social Security Number')])
 	veteran = BooleanField('Veteran')
 	activeMil = BooleanField('Active Military')
 	disability = BooleanField('Disability')
@@ -76,6 +77,7 @@ class CreateClient(FlaskForm):
 						SSN = self.SSN.data,
 						veteran = self.veteran.data,
 						activeMilitary = self.activeMil.data,
+						disability = self.disability.data,
 						foreignBorn = self.foreignBorn.data,
 						ethnicity = self.ethnicity.data,
 						gender = self.gender.data)
@@ -84,6 +86,32 @@ class CreateClient(FlaskForm):
 		clientRace = ClientRace(client_id = client.id, race_id = self.race.data)
 		db.session.add(clientRace)
 		db.session.commit()
+
+
+
+class EditClient(FlaskForm):
+	form_title = 'Edit Client'
+
+	first_name = StringField('First Name', validators=[DataRequired()])
+	middle_name = StringField('Middle Name')
+	last_name = StringField('Last Name', validators=[DataRequired()])
+
+	ssn_regex = '^(?!(000|666|9))\\d{3}-(?!00)\\d{2}-(?!0000)\\d{4}$'
+	SSN = StringField('Social Security #', validators = [Regexp(ssn_regex, message = 'Invalid Social Security Number')])
+	veteran = BooleanField('Veteran')
+	activeMil = BooleanField('Active Military')
+	disability = BooleanField('Disability')
+	foreignBorn = BooleanField('Foreign Born')
+
+	race_choices = [(r.id, r.race) for r in Race.query.all()]
+	ethn_choices = [(e.id, e.ethnicity) for e in Ethnicity.query.all()]
+	gender_choices = [(g.id, g.gender) for g in Gender.query.all()]
+	race = SelectField('Race', choices = race_choices, coerce = int, validators=[DataRequired()])
+	ethnicity = SelectField('Ethnicity', choices = ethn_choices, coerce = int, validators=[DataRequired()])
+	gender = SelectField('Gender', choices = gender_choices, coerce = int, validators=[DataRequired()])
+
+
+	submit = SubmitField('Save Changes')
 
 
 class FilterClients(FlaskForm):
