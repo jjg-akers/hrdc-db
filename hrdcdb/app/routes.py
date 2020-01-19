@@ -6,8 +6,26 @@ from app.forms import *
 from app.models import *
 
 
+@app.route('/login', methods = ['GET','POST'])
+def login():
+	if current_user.is_authenticated:
+		return redirect(url_for('index'))
+	form = LoginForm()
+	if form.validate_on_submit():
+		user = User.query.filter_by(username = form.username.data).first()
+		if user is None or not user.check_password(form.password.data):
+			flash('Invalid username or password')
+			return redirect(url_for('login'))
+		login_user(user, remember = form.remember_me.data)
+		next_page = request.args.get('next')
+		if not next_page or url_parse(next_page).netloc != '':
+			next_page = url_for('index')
+		return redirect(next_page)
+	return render_template('login.html', title = 'Sign In', form = form)
+
 @app.route('/')
 @app.route('/index')
+@login_required
 def index():
 	return render_template('index.html', title = 'Home')
 
@@ -24,10 +42,11 @@ def register():
 		db.session.commit()
 		flash('Now Registered')
 		return redirect(url_for('login'))
-	return render_template('register.html', title = 'Register', form = form)
+	return render_template('form_view.html', title = 'Register', form = form)
 
 
 @app.route('/create_client', methods = ['GET','POST'])
+@login_required
 def create_client():
 	form = CreateClient()
 	if form.validate_on_submit():
@@ -36,6 +55,7 @@ def create_client():
 
 
 @app.route('/<form>_form', methods = ['GET', 'POST'])
+@login_required
 def render_form(form):
 	form_class = globals()[form]
 	instance = form_class()
@@ -46,6 +66,7 @@ def render_form(form):
 
 
 @app.route('/find_clients', methods = ['GET', 'POST'])
+@login_required
 def view_clients():
 	form = FilterClients()
 	if form.validate_on_submit():
@@ -59,6 +80,7 @@ def view_clients():
 
 
 @app.route('/client_<clientid>_dashboard')
+@login_required
 def client_dashboard(clientid):
 	client = Client.query.filter(Client.id == clientid).first()
 	a = ClientRelationship.query.filter(ClientRelationship.client_a_id == clientid).all()
@@ -72,6 +94,7 @@ def client_dashboard(clientid):
 
 
 @app.route('/client_<clientid>_contact', methods = ['GET', 'POST'])
+@login_required
 def create_contact(clientid):
 	form = CreateClientContact()
 	contact_info = ClientContact.query.filter(ClientContact.client_id == clientid).all()
@@ -87,6 +110,7 @@ def create_contact(clientid):
 
 @app.route('/create_relationship_<clientid>', defaults = {'second_client':None}, methods = ['GET','POST'])
 @app.route('/create_relationship_<clientid>_<second_client>', methods = ['GET','POST'])
+@login_required
 def create_relationship(clientid, second_client):
 	form = CreateRelationship()
 	a = ClientRelationship.query.filter(ClientRelationship.client_a_id == clientid).all()
@@ -96,13 +120,35 @@ def create_relationship(clientid, second_client):
 		rel = ClientRelationship(client_a_id = form.first_client.data,
 								 client_b_id = form.second_client.data,
 								 a_to_b_relation = form.relationship.data)
+		if form.relationship.data in [1,6,7,8,9]:
+			back_rel = ClientRelationship(client_a_id = form.second_client.data,
+								 		  client_b_id = form.first_client.data,
+								 		  a_to_b_relation = form.relationship.data)
+		elif form.relationship.data == 2:
+			back_rel = ClientRelationship(client_a_id = form.second_client.data,
+								 		  client_b_id = form.first_client.data,
+								 		  a_to_b_relation = 5)
+		elif form.relationship.data == 5:
+			back_rel = ClientRelationship(client_a_id = form.second_client.data,
+								 		  client_b_id = form.first_client.data,
+								 		  a_to_b_relation = 2)
+		elif form.relationship.data == 3:
+			back_rel = ClientRelationship(client_a_id = form.second_client.data,
+								 		  client_b_id = form.first_client.data,
+								 		  a_to_b_relation = 4)
+		elif form.relationship.data == 4:
+			back_rel = ClientRelationship(client_a_id = form.second_client.data,
+								 		  client_b_id = form.first_client.data,
+								 		  a_to_b_relation = 3)
 		db.session.add(rel)
+		db.session.add(back_rel)
 		db.session.commit()
 		return redirect(url_for('create_relationship', clientid = clientid))
 	return render_template('create_relationship.html', title = 'Create Relationship', data = rels, form = form)	
 
 
 @app.route('/edit_client_<clientid>', methods = ['GET','POST'])
+@login_required
 def edit_client(clientid):
 	client = Client.query.filter(Client.id == clientid).first()
 	data = client.__dict__

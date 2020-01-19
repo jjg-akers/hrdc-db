@@ -2,8 +2,22 @@
 
 {% block content %}
     <div class="formFields">
-        <div class="formElement">Client Name: {{ client.first_name }} {{ client.last_name }}</div>
-        <div class="formElement"></div>
+        <div class="formElement">
+            <table>
+                <tr>
+                    <td>Client Name</td> 
+                    <td>{{ client.first_name }} {{ client.middle_name }} {{ client.last_name }}</td>
+                </tr>
+                <tr>
+                    <td>Date of Birth</td>
+                    <td>{{ client.dob }}</td>
+                </tr>
+                <tr>
+                    <td>Gender</td>
+                    <td>{{ client.gen.gender }}</td>
+                </tr>
+            </table>
+        </div>
         <div class="formElement"><a href="{{ url_for('edit_client', clientid = client.id)}}" class="button">Edit Client Demographics</a></div>
     </div>
 

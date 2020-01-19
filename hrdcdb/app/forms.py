@@ -6,6 +6,7 @@ from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Op
 from app.models import *
 from app import db
 
+
 class LoginForm(FlaskForm):
 	username = StringField('Username', validators = [DataRequired()])
 	password = PasswordField('Password', validators = [DataRequired()])
@@ -47,9 +48,9 @@ class CreateClient(FlaskForm):
 	middle_name = StringField('Middle Name')
 	last_name = StringField('Last Name', validators=[DataRequired()])
 
-	dob = DateField('Date of Birth', format='%m/%d/%Y')
+	dob = DateField('Date of Birth', format='%Y-%m-%d')
 	ssn_regex = '^(?!(000|666|9))\\d{3}-(?!00)\\d{2}-(?!0000)\\d{4}$'
-	SSN = StringField('Social Security #', validators = [Regexp(ssn_regex, message = 'Invalid Social Security Number')])
+	SSN = StringField('Social Security #', validators = [Regexp(ssn_regex, message = 'Invalid Social Security Number'), Optional()])
 	veteran = BooleanField('Veteran')
 	activeMil = BooleanField('Active Military')
 	disability = BooleanField('Disability')
@@ -74,6 +75,7 @@ class CreateClient(FlaskForm):
 		client = Client(first_name = self.first_name.data,
 						middle_name = self.middle_name.data,
 						last_name = self.last_name.data,
+						dob = self.dob.data,
 						SSN = self.SSN.data,
 						veteran = self.veteran.data,
 						activeMilitary = self.activeMil.data,
@@ -88,13 +90,13 @@ class CreateClient(FlaskForm):
 		db.session.commit()
 
 
-
 class EditClient(FlaskForm):
 	form_title = 'Edit Client'
 
 	first_name = StringField('First Name', validators=[DataRequired()])
 	middle_name = StringField('Middle Name')
 	last_name = StringField('Last Name', validators=[DataRequired()])
+	dob = DateField('Date of Birth', format='%Y-%m-%d')
 
 	ssn_regex = '^(?!(000|666|9))\\d{3}-(?!00)\\d{2}-(?!0000)\\d{4}$'
 	SSN = StringField('Social Security #', validators = [Regexp(ssn_regex, message = 'Invalid Social Security Number')])
