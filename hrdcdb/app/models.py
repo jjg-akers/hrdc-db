@@ -48,9 +48,9 @@ class Client(db.Model):
 	gender = db.Column(db.Integer, db.ForeignKey('gender.id'))
 	gen = db.relationship('Gender', uselist = False)
 	dob = db.Column(db.Date)
-	# created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
-	# created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
-	# user = db.relationship('User', uselist = False)
+	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+	user = db.relationship('User', uselist = False)
 
 	def __repr__(self):
 		return '<{} {}>'.format(self.first_name,self.last_name)
@@ -64,9 +64,9 @@ class ClientRelationship(db.Model):
 	relationship = db.relationship('Relationship', uselist=False)
 	client_a = db.relationship('Client', foreign_keys=[client_a_id])
 	client_b = db.relationship('Client', foreign_keys=[client_b_id])
-	# created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
-	# created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
-	# user = db.relationship('User', uselist = False)
+	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+	user = db.relationship('User', uselist = False)
 
 
 class Relationship(db.Model):
