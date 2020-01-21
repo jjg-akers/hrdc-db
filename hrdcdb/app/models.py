@@ -67,7 +67,6 @@ class ClientRelationship(db.Model):
 	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
 	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
 	user = db.relationship('User', uselist = False)
-	# deleted = db.Column(db.Boolean, default = False)
 
 
 class Relationship(db.Model):
@@ -87,7 +86,6 @@ class ClientContact(db.Model):
 	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
 	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
 	user = db.relationship('User', uselist = False)
-	deleted = db.Column(db.Boolean, default = False)
 
 
 class ContactType(db.Model):
@@ -108,7 +106,6 @@ class ClientAddress(db.Model):
 	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
 	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
 	user = db.relationship('User', uselist = False)
-	deleted = db.Column(db.Boolean, default = False)
 
 
 class Gender(db.Model):
@@ -144,7 +141,6 @@ class ClientRace(db.Model):
 	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
 	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
 	user = db.relationship('User', uselist = False)
-	deleted = db.Column(db.Boolean, default = False)
 
 
 ####################################################################################

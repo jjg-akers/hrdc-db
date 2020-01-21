@@ -69,7 +69,7 @@ def create_client():
 						created_by = current_user.id)
 		db.session.add(client)
 		db.session.commit()
-		clientRace = ClientRace(client_id = client.id, race_id = form.race.data)
+		clientRace = ClientRace(client_id = client.id, race_id = form.race.data, created_by = current_user.id)
 		db.session.add(clientRace)
 		db.session.commit()
 		return redirect(url_for('index'))
@@ -121,7 +121,8 @@ def create_contact(clientid):
 	if form.validate_on_submit():
 		new_contact = ClientContact(client_id = clientid,
 									contact = form.contact_info.data,
-									contact_type = form.contact_type.data)
+									contact_type = form.contact_type.data,
+									created_by = current_user.id)
 		db.session.add(new_contact)
 		db.session.commit()
 		return redirect(url_for('create_contact', clientid = clientid))
