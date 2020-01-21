@@ -149,3 +149,35 @@ class CreateRelationship(FlaskForm):
 	submit = SubmitField('Add Relationship')
 
 
+class CreateServiceType(FlaskForm):
+	form_title = 'Create Service Type'
+
+	name = StringField('Service Type Name', validators=[DataRequired()])
+	submit = SubmitField('Add Service Type')
+
+	def validate_name(self, name):
+		service_type = ServiceType.query.filter_by(name = name.data).first()
+		if service_type is not None:
+			raise ValidationError('A service type by that name already exists.')
+
+	def execute_transaction(self):
+		new_service_type = ServiceType(name = self.name.data)
+		db.session.add(new_service_type)
+		db.session.commit()
+
+
+class CreateProgram(FlaskForm):
+	form_title = 'Create Program'
+
+	name = StringField('Program Name', validators = [DataRequired()])
+	submit = SubmitField('Add Service Type')
+
+	def validate_username(self, name):
+		program = Program.query.filter_by(name = name.data).first()
+		if program is not None:
+			raise ValidationError('A program by that name already exists.')
+
+	def execute_transaction(self):
+		new_program = Program(name = self.name.data)
+		db.session.add(new_program)
+		db.session.commit()

@@ -1,8 +1,5 @@
 from app import app, db
-from app.models import User, Client, ClientRelationship,\
-					   Relationship, ClientContact,\
-					   ContactType, ClientAddress,\
-					   Gender, Ethnicity, Race, ClientRace
+from app.models import *
 
 
 race_list = ['White','Another Race','Black or African American','Asian',
@@ -20,20 +17,27 @@ relationships = ['Spouse/Partner','Parent',
 				 'Child','Sibling','Friend',
 				 'Other Relative', 'Other Non-Relative']
 
+programs = ['Housing','Energy','Food Bank','Galavan']
+
+service_types = ['Case Management','Intake','Food Box','Emergency Shelter',
+				 'Energy Assistance','Weatherization','Medical Ride','Social Ride']
+
 
 Ethnicity.query.delete()
 Race.query.delete()
 Gender.query.delete()
 ContactType.query.delete()
 Relationship.query.delete()
+ServiceType.query.delete()
+Program.query.delete()
 
 
 # Uncomment this section to drop all client data
-Client.query.delete()
-ClientRelationship.query.delete()
-ClientAddress.query.delete()
-ClientContact.query.delete()
-ClientRace.query.delete()
+# Client.query.delete()
+# ClientRelationship.query.delete()
+# ClientAddress.query.delete()
+# ClientContact.query.delete()
+# ClientRace.query.delete()
 
 db.session.commit()
 
@@ -55,6 +59,14 @@ for c in contact_types:
 
 for r in relationships:
 	cur = Relationship(relationship = r)
+	db.session.add(cur)
+
+for s in service_types:
+	cur = ServiceType(name = s)
+	db.session.add(cur)
+
+for p in programs:
+	cur = Program(name = p)
 	db.session.add(cur)
 
 db.session.commit()

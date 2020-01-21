@@ -192,3 +192,17 @@ def edit_client(clientid):
 		client.ethnicity = form.ethnicity.data
 		db.session.commit()
 	return render_template('form_view.html', form = form)
+
+
+# record_type is the name of the model as a string
+# e.g. 'Program'
+@app.route('/add_<record_type>', methods = ['GET','POST'])
+def add_record(record_type):
+	record_class = globals()[record_type]
+	record_form = globals()['Create'+record_type]
+	instance = record_form()
+	records = record_class.query.all()
+	if instance.validate_on_submit():
+		instance.execute_transaction()
+		return redirect(url_for('add_record', record_type = record_type))
+	return render_template('add_record.html', title = instance.form_title, form = instance, data = records)
