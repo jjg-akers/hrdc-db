@@ -6,6 +6,9 @@ from app.forms import *
 from app.models import *
 
 
+# This line is put in to test branch switching
+# It should only appear in the serv branch
+
 @app.route('/login', methods = ['GET','POST'])
 def login():
 	if current_user.is_authenticated:
