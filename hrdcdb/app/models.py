@@ -67,6 +67,7 @@ class ClientRelationship(db.Model):
 	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
 	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
 	user = db.relationship('User', uselist = False)
+	# deleted = db.Column(db.Boolean, default = False)
 
 
 class Relationship(db.Model):
@@ -83,6 +84,10 @@ class ClientContact(db.Model):
 	contact = db.Column(db.String(50))
 	contact_type = db.Column(db.Integer, db.ForeignKey('contact_type.id'))
 	ContactType = db.relationship('ContactType', uselist = False)
+	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+	user = db.relationship('User', uselist = False)
+	deleted = db.Column(db.Boolean, default = False)
 
 
 class ContactType(db.Model):
@@ -100,6 +105,10 @@ class ClientAddress(db.Model):
 	start_date = db.Column(db.DateTime)
 	end_date = db.Column(db.DateTime)
 	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+	user = db.relationship('User', uselist = False)
+	deleted = db.Column(db.Boolean, default = False)
 
 
 class Gender(db.Model):
@@ -131,6 +140,11 @@ class ClientRace(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
 	race_id = db.Column(db.Integer, db.ForeignKey('race.id'))
+	race = db.relationship('Race', uselist = False)
+	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+	user = db.relationship('User', uselist = False)
+	deleted = db.Column(db.Boolean, default = False)
 
 
 ####################################################################################

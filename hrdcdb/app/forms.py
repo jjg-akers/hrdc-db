@@ -50,9 +50,9 @@ class CreateClient(FlaskForm):
 
 	dob = DateField('Date of Birth', format='%Y-%m-%d')
 	ssn_regex = '^(?!(000|666|9))\\d{3}-(?!00)\\d{2}-(?!0000)\\d{4}$'
-	SSN = StringField('Social Security #', validators = [Regexp(ssn_regex, message = 'Invalid Social Security Number'), Optional()])
+	SSN = StringField('Social Security #', validators = [Optional(), Regexp(ssn_regex, message = 'Invalid Social Security Number')])
 	veteran = BooleanField('Veteran')
-	activeMil = BooleanField('Active Military')
+	activeMilitary = BooleanField('Active Military')
 	disability = BooleanField('Disability')
 	foreignBorn = BooleanField('Foreign Born')
 
@@ -71,24 +71,6 @@ class CreateClient(FlaskForm):
 		if client is not None:
 			raise ValidationError('A client already exists with that SSN')
 
-	def execute_transaction(self):
-		client = Client(first_name = self.first_name.data,
-						middle_name = self.middle_name.data,
-						last_name = self.last_name.data,
-						dob = self.dob.data,
-						SSN = self.SSN.data,
-						veteran = self.veteran.data,
-						activeMilitary = self.activeMil.data,
-						disability = self.disability.data,
-						foreignBorn = self.foreignBorn.data,
-						ethnicity = self.ethnicity.data,
-						gender = self.gender.data)
-		db.session.add(client)
-		db.session.commit()
-		clientRace = ClientRace(client_id = client.id, race_id = self.race.data)
-		db.session.add(clientRace)
-		db.session.commit()
-
 
 class EditClient(FlaskForm):
 	form_title = 'Edit Client'
@@ -101,7 +83,7 @@ class EditClient(FlaskForm):
 	ssn_regex = '^(?!(000|666|9))\\d{3}-(?!00)\\d{2}-(?!0000)\\d{4}$'
 	SSN = StringField('Social Security #', validators = [Regexp(ssn_regex, message = 'Invalid Social Security Number')])
 	veteran = BooleanField('Veteran')
-	activeMil = BooleanField('Active Military')
+	activeMilitary = BooleanField('Active Military')
 	disability = BooleanField('Disability')
 	foreignBorn = BooleanField('Foreign Born')
 

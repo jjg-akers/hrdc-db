@@ -25,6 +25,7 @@
             <th>Last Name</th>
             <th>Gender</th>
             <th>Veteran Status</th>
+            <th>Created By</th>
             <th>Go to Dashboard</th>
         </tr>
         {% for c in clients %}
@@ -34,6 +35,7 @@
             <td>{{ c.last_name }}</td>
             <td>{{ c.gen.gender }}</td>
             <td>{{ c.veteran }}</td>
+            <td>{{ c.user.username }}</td>
             <td><a href="{{ url_for('client_dashboard', clientid = c.id)}}">Dashboard</a></td>
         </tr>
         {% endfor%}
