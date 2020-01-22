@@ -147,31 +147,49 @@ class ClientRace(db.Model):
 # The Program and Service tables define how services are tracked across the agency #
 ####################################################################################
 
+class ServiceType(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	name = db.Column(db.String(50))
 
-# class Service(db.Model):
-# 	id = db.Column(db.Integer, primary_key = True)
-# 	service_type = db.Column(db.Integer, db.ForeignKey('servicetype.id'))
-# 	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
-# 	program_id = db.Column(db.Integer, db.ForeignKey('program.id'))
-# 	entered_by = db.Column(db.Integer, db.ForeignKey('user.id'))
-# 	begin_date = db.Column(db.DateTime)
-# 	end_date = db.Column(db.DateTime)
+	def __repr__(self):
+		return '<ServiceType {}>'.format(self.name)
 
 
-# class Program(db.Model):
-# 	id = db.Column(db.Integer, primary_key = True)
-# 	name = db.Column(db.String(20))
+class Program(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	name = db.Column(db.String(20))
+
+	def __repr__(self):
+		return '<Program {}>'.format(self.name)
 
 
-# class ServiceType(db.Model):
-# 	id = db.Column(db.Integer, primary_key = True)
-# 	name = db.Column(db.String(50))
+class Service(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	service_type_id = db.Column(db.Integer, db.ForeignKey('service_type.id'))
+	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+	program_id = db.Column(db.Integer, db.ForeignKey('program.id'))
+	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+	begin_date = db.Column(db.DateTime)
+	end_date = db.Column(db.DateTime)
+	program = db.relationship('Program', uselist = False)
+	user = db.relationship('User', uselist = False)
+	service_type = db.relationship('ServiceType', uselist = False)
+	client = db.relationship('Client', uselist = False)
+
+	def __repr__(self):
+		return '<Service {}>'.format(self.id)
 
 
-# class ProgramServiceType(db.Model):
-# 	id = db.Column(db.Integer, primary_key = True)
-# 	program_id = db.Column(db.Integer, db.ForeignKey('program.id'))
-# 	service_type_id = db.Column(db.Integer, db.ForeignKey('servicetype.id'))
+class ProgramServiceType(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	program_id = db.Column(db.Integer, db.ForeignKey('program.id'))
+	service_type_id = db.Column(db.Integer, db.ForeignKey('service_type.id'))
+	program = db.relationship('Program', uselist = False)
+	service_type = db.relationship('ServiceType', uselist = False)
+
+	def __repr__(self):
+		return '<ProgramServiceType {}>'.format(self.id)
 
 
 ##########################################################
