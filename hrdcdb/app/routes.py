@@ -206,3 +206,20 @@ def add_record(record_type):
 		instance.execute_transaction()
 		return redirect(url_for('add_record', record_type = record_type))
 	return render_template('add_record.html', title = instance.form_title, form = instance, data = records)
+
+
+@app.route('/add_Service_<clientid>', methods = ['GET','POST'])
+def add_service(clientid):
+	services = Service.query.filter(Service.client_id == clientid).all()
+	form = CreateService()
+	if form.validate_on_submit():
+		new_service = Service(service_type_id = form.service_type.data,
+							  client_id = clientid,
+							  program_id = form.program.data,
+							  created_by = current_user.id,
+							  begin_date = form.begin_date.data,
+							  end_date = form.end_date.data)
+		db.session.add(new_service)
+		db.session.commit()
+		return redirect(url_for('add_service', clientid = clientid))
+	return render_template('add_service.html', title = 'Add Service', form = form, data = services)

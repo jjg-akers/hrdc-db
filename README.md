@@ -2,49 +2,36 @@
 
 This is my project to create an alternative to CaseWorthy. I'm going to use Python Flask to build the forms and interface logic, and SQLAlchemy to build the database logic.
 
-## Current To-Dos:
+## Current Version: 0.2
 
-- CreateClient form
-  - Multiple values for race
-  - Form validation
-    - Duplicate Check
-    - SSN formatting
-      - ~~Check against existing entries~~
-      - ~~Check for correct formatting~~
-      - Allow partial ssns
-    - Extra form field descriptions
-  - Formatting
-    - ~~Build generic form rendering template~~
-- Client search functionality
-  - What are best practices?
-- Build forms for other tables
-  - Relationship
-  - ClientContact
-  - ClientAddress
+The current 'stable' version has a few core features:
+
+- Clients
+  - Create and update
+  - Search
+  - Add contact information
+  - Add relationships between clients
+- Services
+  - Create programs and service types
+  - Add services to a client
+- Users
+  - Manage user logins and password hashing
 
 
-## Future To-Dos:
+## Version 0.5 Goals
 
-- Implement other families of tables
-  - Assessment
-  - Service
-- Make forms to create records in those tables
-- Incorporate 'Current Client' information
-  - Dashboard
-- Reporting
-  - Integrate pandas/seaborn
-- Migrate data from CaseWorthy
-
-## Future Future To-Dos:
+- Clients
+  - All CRUD operations
+- Services
+  - All CRUD operations
+  - Limit service types by program
+    - e.g. only the warming center has the service type "emergency shelter"
+- Users
+  - Manage user roles (i.e. admin/regular)
 
 
-- Testing
-- Improve data security
-- Research best ways to launch
-  - AWS/GCP
-  - Self-Host
-- Automatic form filler
-  - ServicePoint is a potential pilot
-  - See form-filler repo for more on this
-    - Prototype of HF HUD counseling data entry is live
-- Testing
+## Version 1.0 Goals
+
+- Generate CSBG All Characteristics report
+  - Collect all relavent information about clients
+- Generate other reports, similar to current CaseWorthy capabilities 

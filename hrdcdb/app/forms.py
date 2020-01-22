@@ -181,3 +181,16 @@ class CreateProgram(FlaskForm):
 		new_program = Program(name = self.name.data)
 		db.session.add(new_program)
 		db.session.commit()
+
+
+class CreateService(FlaskForm):
+	form_title = 'Create Program'
+
+	program_choices = [(p.id, p.name) for p in Program.query.all()]
+	ServiceType_choices = [(st.id, st.name) for st in ServiceType.query.all()]
+
+	program = SelectField('Program', choices = program_choices, coerce = int)
+	service_type = SelectField('Service Type', choices = ServiceType_choices, coerce = int)
+	begin_date = DateField('Begin Date', format='%Y-%m-%d')
+	end_date = DateField('End Date', format='%Y-%m-%d')
+	submit = SubmitField('Add Service')

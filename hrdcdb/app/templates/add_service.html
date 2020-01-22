@@ -28,12 +28,20 @@
             <table>
                 <tr>
                     <th>ID</th>
-                    <th>Name</th>
+                    <th>Service Type</th>
+                    <th>Program</th>
+                    <th>Begin Date</th>
+                    <th>End Date</th>
+                    <th>Created By</th>
                 </tr>
                 {% for d in data %}
                 <tr>
                     <td>{{ d.id }}</td>
-                    <td>{{ d.name }}</td>
+                    <td>{{ d.service_type.name }}</td>
+                    <td>{{ d.program.name }}</td>
+                    <td>{{ d.begin_date }}</td>
+                    <td>{{ d.end_date }}</td>
+                    <td>{{ d.user.username }}</td>
                 </tr>
                 {% endfor %}
             </table>
