@@ -229,4 +229,5 @@ def add_service(clientid):
 @app.route('/client_checkin', methods = ['GET','POST'])
 def client_checkin():
 	roster = read_checkin_roster()
+	roster['button'] = '''<a href='{{url_for("find_clients")}}'>Search</a>'''
 	return render_template('client_checkin.html', roster = roster)
