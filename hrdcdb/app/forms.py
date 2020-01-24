@@ -104,6 +104,7 @@ class FilterClients(FlaskForm):
 	first_name = StringField('First Name')
 	middle_name = StringField('Middle Name')
 	last_name = StringField('Last Name')
+	dob = DateField('Date of Birth', format='%Y-%m-%d')
 	SSN = StringField('Social Security #')
 
 	exact_match = BooleanField('Require Exact Match')

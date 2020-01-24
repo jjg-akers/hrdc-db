@@ -1,4 +1,5 @@
-from flask import render_template, flash, redirect, url_for, request
+import ast
+from flask import render_template, flash, redirect, url_for, request, jsonify
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
@@ -91,10 +92,13 @@ def render_form(form):
 	return render_template('form_view.html', title = instance.form_title, form = instance)
 
 
-@app.route('/find_clients', methods = ['GET', 'POST'])
+@app.route('/find_clients_<client_data>', methods = ['GET', 'POST'])
 @login_required
-def view_clients():
-	form = FilterClients()
+def view_clients(client_data):
+	client = client_data
+	print(type(client))
+	print(client)
+	form = FilterClients(data = client)
 	if form.validate_on_submit():
 		clients = Client.query
 		if form.first_name.data:
@@ -229,5 +233,4 @@ def add_service(clientid):
 @app.route('/client_checkin', methods = ['GET','POST'])
 def client_checkin():
 	roster = read_checkin_roster()
-	roster['button'] = '''<a href='{{url_for("find_clients")}}'>Search</a>'''
 	return render_template('client_checkin.html', roster = roster)

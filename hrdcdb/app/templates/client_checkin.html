@@ -1,5 +1,34 @@
 {% extends "base.html" %}
 
 {% block content %}
-{{ roster.to_html(index = False, escape = False) | safe }}
+
+
+<table>
+    <tr>
+        <th>Time</th>
+        <th>First Name</th>
+        <th>Middle Name</th>
+        <th>Last Name</th>
+        <th>DOB</th>
+        <th>Last 4 of SSN</th>
+        <th>Search</th>
+    </tr>
+
+{% for key, value in roster.iterrows() %}
+{% set data = dict() %}
+{% set x = data.__setitem__(key,value) %}
+    <tr>
+        <td>{{ value['Timestamp'] }}</td>
+        <td>{{ value['First Name'] }}</td>
+        <td>{{ value['Middle Name (optional)'] }}</td>
+        <td>{{ value['Last Name'] }}</td>
+        <td>{{ value['Date of Birth'] }}</td>
+        <td>{{ value['Last 4 of Social Security #'] }}</td>
+        <td><a href="{{ url_for('view_clients', client_data = data) }}">Search</a></td>
+    </tr>
+{% endfor %}
+</table>
+
+<!--{{ roster.to_html(index = False, escape = False) | safe}}-->
+
 {% endblock %}
