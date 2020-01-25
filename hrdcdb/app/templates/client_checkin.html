@@ -16,7 +16,11 @@
 
 {% for key, value in roster.iterrows() %}
 {% set data = dict() %}
-{% set x = data.__setitem__(key,value) %}
+{% set x = data.update({'first_name':value['First Name']}) %}
+{% set x = data.update({'middle_name':value['Middle Name (optional)']}) %}
+{% set x = data.update({'last_name':value['Last Name']}) %}
+{% set x = data.update({'dob':value['Date of Birth']}) %}
+{% set x = data.update({'SSN':value['Last 4 of Social Security #']}) %}
     <tr>
         <td>{{ value['Timestamp'] }}</td>
         <td>{{ value['First Name'] }}</td>
@@ -24,7 +28,7 @@
         <td>{{ value['Last Name'] }}</td>
         <td>{{ value['Date of Birth'] }}</td>
         <td>{{ value['Last 4 of Social Security #'] }}</td>
-        <td><a href="{{ url_for('view_clients', client_data = data) }}">Search</a></td>
+        <td><a href="{{ url_for('view_clients', client_data = str(data)) }}">Search</a></td>
     </tr>
 {% endfor %}
 </table>

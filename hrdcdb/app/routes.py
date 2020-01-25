@@ -92,10 +92,11 @@ def render_form(form):
 	return render_template('form_view.html', title = instance.form_title, form = instance)
 
 
+@app.route('/find_clients_<client_data>', defaults = {'client_data':None}, methods = ['GET','POST'])
 @app.route('/find_clients_<client_data>', methods = ['GET', 'POST'])
 @login_required
-def view_clients(client_data):
-	client = client_data
+def view_clients(client_data = None):
+	client = eval(client_data)
 	print(type(client))
 	print(client)
 	form = FilterClients(data = client)

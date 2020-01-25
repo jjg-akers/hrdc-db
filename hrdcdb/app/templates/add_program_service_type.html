@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="addRecord">
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+
+            
+            {% for field in form %}
+                {% if field.type != 'CSRFTokenField' %}
+                <div class="formElement">
+                	{% if field.type == 'SubmitField' %}
+	                	<center>{{ field() }}</center>
+                	{% else %}
+	                    <strong>{{ field.label() }}:</strong>
+	                    {{ field() }} <br>
+	                    {% for error in field.errors %}
+	                    	<span style="color: red;">[{{ error }}]</span>
+	                    {% endfor %}
+                    {% endif %}
+                </div>
+                {% endif %}
+            {% endfor %}
+        </form>
+    </div>
+    <div class="showRecord">
+        <div class="formElement">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Service Type</th>
+                    <th>Program</th>
+                </tr>
+                {% for d in data %}
+                <tr>
+                    <td>{{ d.id }}</td>
+                    <td>{{ d.service_type.name }}</td>
+                    <td>{{ d.program.name }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
