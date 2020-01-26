@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="{{ url_for('static', filename = 'styles/universal_form.css') }}">
+	</head>
+	<body>
+
+		<div class="formHeader">
+			<h2>HRDC - Universal Intake Summary</h2>
+		</div>
+
+		<div class="formBlock">
+			<div class="formLabel"><strong>First Name:</strong></div>
+			<div class="formInfo">{{ client.first_name }}</div>
+			<div class="formLabel"><strong>Middle Name:</strong></div>
+			<div class="formInfo">{{ client.middle_name }}</div>
+			<div class="formLabel"><strong>Last Name:</strong></div>
+			<div class="formInfo">{{ client.last_name }}</div>
+		</div>
+
+		<div class="formBlock">
+			<div class="formLabel">Date of Birth:</div>
+			<div class="formInfo">{{ client.dob.strftime('%m/%d/%Y') }}</div>
+			<div class="formLabel">SSN (Last 4):</div>
+			<div class="formInfo">xxx-xx-{{ client.SSN[-4:] }}</div>
+		</div>
+	</body>
+</html>

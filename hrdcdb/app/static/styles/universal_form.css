@@ -1,0 +1,48 @@
+body{
+	width: 21cm;
+	height:29.7cm;
+	margin: 30mm 45mm 30mm 45mm;
+	background-color: #ffffff
+}
+
+.formLabel{
+    padding: 15px 10px 15px 10px;
+    background: #EEEEEE;
+    margin: 1em 0;
+    display: inline-block;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.formHeader{
+    background: #EEEEEE;
+    margin: 1em 0;
+    display: inline-block;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%
+}
+
+.formInfo{
+    padding: 15px 32px;
+    background: #ccEEEE;
+    margin: 1em 0;
+    display: inline-block;
+    text-align: center;
+    font-size: 16px;
+    flex-grow: 1.5;
+    cursor: pointer;
+}
+
+.formBlock{
+  width: 100%;
+  float: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-around;
+  justify-content: flex-start;
+  margin: 1em 0;
+  border-width: 1px;
+}

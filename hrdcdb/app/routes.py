@@ -5,11 +5,8 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from app.forms import *
 from app.models import *
-from app.kiosk import read_checkin_roster, checkin_to_db
+from app.kiosk import checkin_to_db
 
-
-# This line is put in to test branch switching
-# It should only appear in the serv branch
 
 @app.route('/login', methods = ['GET','POST'])
 def login():
@@ -28,10 +25,12 @@ def login():
 		return redirect(next_page)
 	return render_template('login.html', title = 'Sign In', form = form)
 
+
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
 
 @app.route('/')
 @app.route('/index')
@@ -96,10 +95,11 @@ def render_form(form):
 @app.route('/find_clients_<client_data>', methods = ['GET', 'POST'])
 @login_required
 def view_clients(client_data = None):
-	client = eval(client_data)
-	print(type(client))
-	print(client)
-	form = FilterClients(data = client)
+	if client_data:
+		search_data = Kiosk.query.filter(Kiosk.id == client_data).first()
+		form = FilterClients(data = search_data.__dict__)
+	else:
+		form = FilterClients()
 	if form.validate_on_submit():
 		clients = Client.query
 		if form.first_name.data:
@@ -236,3 +236,9 @@ def client_checkin():
 	checkin_to_db()
 	lobby = Kiosk.query.all()
 	return render_template('client_checkin.html', lobby = lobby)
+
+
+@app.route('/universal_form_<clientid>', methods = ['GET','POST'])
+def universal_form(clientid):
+	client = Client.query.filter(Client.id == clientid).first()
+	return render_template('universal_form.html', client = client)
