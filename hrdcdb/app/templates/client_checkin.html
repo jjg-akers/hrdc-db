@@ -14,25 +14,18 @@
         <th>Search</th>
     </tr>
 
-{% for key, value in roster.iterrows() %}
-{% set data = dict() %}
-{% set x = data.update({'first_name':value['First Name']}) %}
-{% set x = data.update({'middle_name':value['Middle Name (optional)']}) %}
-{% set x = data.update({'last_name':value['Last Name']}) %}
-{% set x = data.update({'dob':value['Date of Birth']}) %}
-{% set x = data.update({'SSN':value['Last 4 of Social Security #']}) %}
+{% for client in lobby %}
     <tr>
-        <td>{{ value['Timestamp'] }}</td>
-        <td>{{ value['First Name'] }}</td>
-        <td>{{ value['Middle Name (optional)'] }}</td>
-        <td>{{ value['Last Name'] }}</td>
-        <td>{{ value['Date of Birth'] }}</td>
-        <td>{{ value['Last 4 of Social Security #'] }}</td>
-        <td><a href="{{ url_for('view_clients', client_data = str(data)) }}">Search</a></td>
+      <td>{{ client.timestamp }}</td>
+      <td>{{ client.first_name }}</td>
+      <td>{{ client.middle_name }}</td>
+      <td>{{ client.last_name }}</td>
+      <td>{{ client.dob }}</td>
+      <td>{{ client.SSN }}</td>
     </tr>
 {% endfor %}
 </table>
 
-<!--{{ roster.to_html(index = False, escape = False) | safe}}-->
+
 
 {% endblock %}

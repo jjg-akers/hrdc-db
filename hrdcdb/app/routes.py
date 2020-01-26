@@ -5,7 +5,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from app.forms import *
 from app.models import *
-from app.kiosk import read_checkin_roster
+from app.kiosk import read_checkin_roster, checkin_to_db
 
 
 # This line is put in to test branch switching
@@ -233,5 +233,6 @@ def add_service(clientid):
 
 @app.route('/client_checkin', methods = ['GET','POST'])
 def client_checkin():
-	roster = read_checkin_roster()
-	return render_template('client_checkin.html', roster = roster)
+	checkin_to_db()
+	lobby = Kiosk.query.all()
+	return render_template('client_checkin.html', lobby = lobby)

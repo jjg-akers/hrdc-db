@@ -29,6 +29,25 @@ class User(UserMixin, db.Model):
 		return check_password_hash(self.password_hash, password)
 
 
+################################################################
+# The Kiosk model collects data from a customer check-in kiosk #
+################################################################
+
+
+class Kiosk(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	timestamp = db.Column(db.DateTime, index = True)
+	first_name = db.Column(db.String(20))
+	middle_name = db.Column(db.String(20))
+	last_name = db.Column(db.String(20))
+	dob = db.Column(db.Date)
+	SSN = db.Column(db.String(4))
+
+	def __repr__(self):
+		return '<{} {} check-in>'.format(self.first_name, self.timestamp)
+
+
+
 #################################################################################
 # The Client tables define demographic and family information about each client #
 #################################################################################
