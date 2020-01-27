@@ -42,6 +42,8 @@ class Kiosk(db.Model):
 	last_name = db.Column(db.String(20))
 	dob = db.Column(db.Date)
 	SSN = db.Column(db.String(4))
+	seen = db.Column(db.Boolean)
+	cleared = db.Column(db.Boolean)
 
 	def __repr__(self):
 		return '<{} {} check-in>'.format(self.first_name, self.timestamp)

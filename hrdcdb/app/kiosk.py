@@ -22,11 +22,13 @@ def checkin_to_db():
 		if len(data) == 6:
 			chk = Kiosk(timestamp = datetime.strptime(data[0],'%m/%d/%Y %H:%M:%S'), first_name = data[1],
 		            middle_name = data[2], last_name = data[3],
-		            dob = datetime.strptime(data[4], '%m/%d/%Y'), SSN = data[5])
+		            dob = datetime.strptime(data[4], '%m/%d/%Y'), SSN = data[5],
+		            seen = False, cleared = False)
 		else:
 			chk = Kiosk(timestamp = datetime.strptime(data[0],'%m/%d/%Y %H:%M:%S'), first_name = data[1],
 		            middle_name = data[2], last_name = data[3],
-		            dob = datetime.strptime(data[4], '%m/%d/%Y'))
+		            dob = datetime.strptime(data[4], '%m/%d/%Y'),
+		            seen = False, cleared = False)
 		db.session.add(chk)
 		db.session.commit()
 		ws.delete_row(2)

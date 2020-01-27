@@ -26,6 +26,8 @@ def upgrade():
     sa.Column('last_name', sa.String(length=20), nullable=True),
     sa.Column('dob', sa.Date(), nullable=True),
     sa.Column('SSN', sa.String(length=4), nullable=True),
+    sa.Column('seen', sa.Boolean(), nullable=True),
+    sa.Column('cleared', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_kiosk_timestamp'), 'kiosk', ['timestamp'], unique=False)

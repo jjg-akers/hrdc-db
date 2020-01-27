@@ -7,7 +7,6 @@ from app.forms import *
 from app.models import *
 from app.kiosk import checkin_to_db
 
-
 @app.route('/login', methods = ['GET','POST'])
 def login():
 	if current_user.is_authenticated:
@@ -95,7 +94,7 @@ def render_form(form):
 @app.route('/find_clients_<client_data>', methods = ['GET', 'POST'])
 @login_required
 def view_clients(client_data = None):
-	if client_data:
+	if client_data != 'None':
 		search_data = Kiosk.query.filter(Kiosk.id == client_data).first()
 		form = FilterClients(data = search_data.__dict__)
 	else:
