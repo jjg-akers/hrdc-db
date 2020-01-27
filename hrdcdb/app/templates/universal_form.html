@@ -10,19 +10,67 @@
 		</div>
 
 		<div class="formBlock">
-			<div class="formLabel"><strong>First Name:</strong></div>
+			<div class="formLabel">First Name</div>
 			<div class="formInfo">{{ client.first_name }}</div>
-			<div class="formLabel"><strong>Middle Name:</strong></div>
+			<div class="formLabel">Middle Name</div>
 			<div class="formInfo">{{ client.middle_name }}</div>
-			<div class="formLabel"><strong>Last Name:</strong></div>
+			<div class="formLabel">Last Name</div>
 			<div class="formInfo">{{ client.last_name }}</div>
 		</div>
 
 		<div class="formBlock">
-			<div class="formLabel">Date of Birth:</div>
+			<div class="formLabel">Date of Birth</div>
 			<div class="formInfo">{{ client.dob.strftime('%m/%d/%Y') }}</div>
-			<div class="formLabel">SSN (Last 4):</div>
+			<div class="formLabel">SSN (Last 4)</div>
 			<div class="formInfo">xxx-xx-{{ client.SSN[-4:] }}</div>
+		</div>
+
+		<div class="formBlock">
+			<div class="formLabel">Address</div>
+			<div class="formInfo">{{ address.address }}</div>
+			<div class="formLabel">Zip Code</div>
+			<div class="formInfo">{{ address.zipcode }}</div>
+		</div>
+
+		<div class="formBlock">
+			<div class="formLabel">Cell Phone</div>
+			<div class="formInfo">{{ cell.contact }}</div>
+			<div class="formLabel">Email</div>
+			<div class="formInfo">{{ email.contact }}</div>
+			<div class="formLabel">Work Phone</div>
+			<div class="formInfo">{{ work.contact }}</div>
+		</div>
+
+		<div class="formBlock">
+			<div class="formLabel">Gender</div>
+			<div class="formInfo">{{ client.gen.gender }}</div>
+			<div class="formLabel">Race</div>
+			<div class="formInfo">{{ client.race.race.race }}</div>
+			<div class="formLabel">Ethnicity</div>
+			<div class="formInfo">{{ client.eth.ethnicity }}</div>
+		</div>
+
+		<div class="formBlock">
+			<div class="formLabel">Veteran Status</div>
+			{% if client.veteran %}
+			<div class="formInfo">Yes</div>
+			{% else %}
+			<div class="formInfo">No</div>
+			{% endif %}
+
+			<div class="formLabel">Active Military</div>
+			{% if client.activeMilitary %}
+			<div class="formInfo">Yes</div>
+			{% else %}
+			<div class="formInfo">No</div>
+			{% endif %}
+
+			<div class="formLabel">Foreign Born</div>
+			{% if client.foreignBorn %}
+			<div class="formInfo">Yes</div>
+			{% else %}
+			<div class="formInfo">No</div>
+			{% endif %}
 		</div>
 	</body>
 </html>

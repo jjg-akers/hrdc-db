@@ -240,4 +240,10 @@ def client_checkin():
 @app.route('/universal_form_<clientid>', methods = ['GET','POST'])
 def universal_form(clientid):
 	client = Client.query.filter(Client.id == clientid).first()
-	return render_template('universal_form.html', client = client)
+	address = ClientAddress.query.filter(ClientAddress.client_id == clientid).first()
+	cell = ClientContact.query.filter(ClientContact.client_id == clientid).filter(ClientContact.contact_type == 3).first()
+	email = ClientContact.query.filter(ClientContact.client_id == clientid).filter(ClientContact.contact_type == 5).first()
+	work = ClientContact.query.filter(ClientContact.client_id == clientid).filter(ClientContact.contact_type == 1).first()
+	return render_template('universal_form.html', 
+						   client = client, address = address,
+						   cell = cell, email = email, work = work)
