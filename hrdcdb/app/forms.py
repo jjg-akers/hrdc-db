@@ -210,6 +210,34 @@ class CreateProgram(FlaskForm):
 		db.session.commit()
 
 
+class OMAssessment(FlaskForm):
+	form_title = 'Outcome Matrix Assessment'
+
+	created_by = IntegerField('User ID', validators = [DataRequired()])
+	client_id = IntegerField('Client ID', validators = [DataRequired()])
+
+
+	hou_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'housing').all()]
+	housing = SelectField('Housing Score', choices = hou_choices, coerce = int)
+
+	tran_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'transportation').all()]
+	transportation = SelectField('Transportation Score', choices = tran_choices, coerce = int)
+
+	edu_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'education').all()]
+	education = SelectField('Education Score', choices = edu_choices, coerce = int)
+
+	emp_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'employment').all()]
+	employment = SelectField('Employment Score', choices = emp_choices, coerce = int)
+
+	cc_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'childcare').all()]
+	childcare = SelectField('Childcare Score', choices = cc_choices, coerce = int)
+
+	inc_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'income').all()]
+	income = SelectField('Income Score', choices = inc_choices, coerce = int)
+
+	submit = SubmitField('Complete Assessment')
+
+
 class CreateService(FlaskForm):
 	form_title = 'Create Program'
 

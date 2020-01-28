@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="" method="post">
+            {{ form.hidden_tag() }}
+   <div class="formFields readonly">
+        <div class="formElement">
+            {{ form.created_by.label }}
+            {{ form.created_by(readonly=True) }}
+        </div>
+        <div class="formElement">
+            {{ form.client_id.label }}
+            {{ form.client_id(readonly=True) }}
+        </div>
+   </div>
+
+   <div class="formFields">
+        <div class="formElement">
+            {{ form.housing.label }}
+            {{ form.housing }}
+        </div>
+        <div class="formElement">
+            {{ form.transportation.label }}
+            {{ form.transportation }}
+        </div>
+        <div class="formElement">
+            {{ form.education.label }}
+            {{ form.education }}
+        </div>
+        <div class="formElement">
+            {{ form.employment.label }}
+            {{ form.employment }}
+        </div>
+        <div class="formElement">
+            {{ form.childcare.label }}
+            {{ form.childcare }}
+        </div>
+        <div class="formElement">
+            {{ form.income.label }}
+            {{ form.income }}
+        </div>
+        <div class="formElement">
+            {{ form.submit }}
+        </div>
+   </div>
+</form>
+{% endblock %}
