@@ -117,6 +117,7 @@ def client_dashboard(clientid):
 	relations = ClientRelationship.query.filter(ClientRelationship.client_a_id == clientid).all()
 
 	contact_info = ClientContact.query.filter(ClientContact.client_id == clientid).all()
+	services = Service.query.filter(Service.client_id == clientid).all()
 	try:
 		address = ClientAddress.query.filter(ClientAddress.client_id == clientid).all()[-1]
 	except IndexError:
@@ -124,7 +125,7 @@ def client_dashboard(clientid):
 	return render_template('client_dashboard.html', 
 							title = '{} {} Dashboard'.format(client.first_name, client.last_name),
 							client = client, relations = relations, contact_info = contact_info,
-							address = address)
+							address = address, services = services)
 
 
 @app.route('/client_<clientid>_contact', methods = ['GET', 'POST'])

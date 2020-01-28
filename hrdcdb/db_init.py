@@ -32,6 +32,7 @@ Relationship.query.delete()
 ServiceType.query.delete()
 Program.query.delete()
 ProgramServiceType.query.delete()
+Service.query.delete()
 
 
 # Uncomment this section to drop all client data
