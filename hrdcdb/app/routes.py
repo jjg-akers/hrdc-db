@@ -222,4 +222,7 @@ def add_service(clientid):
 		db.session.add(new_service)
 		db.session.commit()
 		return redirect(url_for('add_service', clientid = clientid))
+	#else:
 	return render_template('add_service.html', title = 'Add Service', form = form, data = services)
+
+

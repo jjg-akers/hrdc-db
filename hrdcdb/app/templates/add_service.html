@@ -27,7 +27,8 @@
         <div class="formElement">
             <table>
                 <tr>
-                    <th>ID</th>
+                    <th>Record ID</th>
+                    <th>Client ID</th>
                     <th>Service Type</th>
                     <th>Program</th>
                     <th>Begin Date</th>
@@ -36,7 +37,8 @@
                 </tr>
                 {% for d in data %}
                 <tr>
-                    <td>{{ d.id }}</td>
+                    <td class='serviceRecordID'>{{ d.id }}</td>
+                    <td class='clientID'>{{ d.client_id }}</td>
                     <td>{{ d.service_type.name }}</td>
                     <td>{{ d.program.name }}</td>
                     <td>{{ d.begin_date }}</td>
