@@ -25,20 +25,25 @@ window.onload=function(){
             console.log("url: " + $urlString)
             $.ajax({
                 url: $urlString,
-                type: 'GET'
+                type: 'GET',
+                data: {'recordID': $value,},
+                success: function(response) {
+                    // if the response is a success, remove the table row
+                    $row.remove();
+                    console.log(response);
+                },
+                error: function(error){
+                    console.log(error);
+                    $.ajax({
+                        url: $urlString,
+                        type: 'GET'
+                    });
+                }
             });
-            
-//            jQuery.each($columns, function(i, item){
-//                values = values + 'td' + (i + 1) + ':' +item.innerHTML + '<br/>';
-//                console.log(values);
-//            })
-            
-            
+                        
         } else {
             console.log("user concelled");
         }
-        
-        //alert("something")
-    })
+    });
 
 }

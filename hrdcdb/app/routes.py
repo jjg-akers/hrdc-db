@@ -1,6 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
+from flask import json
 from app import app, db
 from app.forms import *
 from app.models import *
@@ -222,7 +223,41 @@ def add_service(clientid):
 		db.session.add(new_service)
 		db.session.commit()
 		return redirect(url_for('add_service', clientid = clientid))
-	#else:
-	return render_template('add_service.html', title = 'Add Service', form = form, data = services)
+
+	elif request.method == 'GET':
+
+		# check for request parameters
+		if request.args.get('recordID'):
+
+			#get the recorde id that needs to be deletedf
+			recordID = request.args.get('recordID')
+
+			# update database
+			recordToDel = Service.query.filter(Service.id == recordID).all()
+
+			#print("client id: ", type(str(recordToDel[0].client_id)))
+			#print("other client id: ", type(clientid))
+			#print(clientid == str(recordToDel[0].client_id))
+			#print("len: ", len(recordToDel))
+
+			# do some validation
+			if (len(recordToDel) == 1 and str(recordToDel[0].client_id) == clientid):
+				db.session.delete(recordToDel[0])
+				db.session.commit()
+
+				#print("len: ", len(recordToDel))
+				#print("record: ", recordToDel[0].id)
+				return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
+
+			else:
+				#print("somethings wrong with query")
+				return json.dumps({'error': True}), 404, {'ContentType': 'application/json'}
+		# if no parameters are present, its just a regular get
+		else:
+			return render_template('add_service.html', title = 'Add Service', form = form, data = services)
+
+	# if the submit and validate fails
+	else:
+		return render_template('add_service.html', title='Add Service', form=form, data=services)
 
 
