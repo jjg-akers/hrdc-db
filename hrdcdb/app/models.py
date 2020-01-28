@@ -29,6 +29,27 @@ class User(UserMixin, db.Model):
 		return check_password_hash(self.password_hash, password)
 
 
+################################################################
+# The Kiosk model collects data from a customer check-in kiosk #
+################################################################
+
+
+class Kiosk(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	timestamp = db.Column(db.DateTime, index = True)
+	first_name = db.Column(db.String(20))
+	middle_name = db.Column(db.String(20))
+	last_name = db.Column(db.String(20))
+	dob = db.Column(db.Date)
+	SSN = db.Column(db.String(4))
+	seen = db.Column(db.Boolean)
+	cleared = db.Column(db.Boolean)
+
+	def __repr__(self):
+		return '<{} {} check-in>'.format(self.first_name, self.timestamp)
+
+
+
 #################################################################################
 # The Client tables define demographic and family information about each client #
 #################################################################################
@@ -43,14 +64,16 @@ class Client(db.Model):
 	activeMilitary = db.Column(db.Boolean)
 	disability = db.Column(db.Boolean)
 	foreignBorn = db.Column(db.Boolean)
-	race = db.relationship('ClientRace', backref = 'Client', lazy = 'dynamic')
 	ethnicity = db.Column(db.Integer, db.ForeignKey('ethnicity.id'))
 	gender = db.Column(db.Integer, db.ForeignKey('gender.id'))
-	gen = db.relationship('Gender', uselist = False)
 	dob = db.Column(db.Date)
 	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
 	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+	gen = db.relationship('Gender', uselist = False)
+	race = db.relationship('ClientRace', uselist = False)
 	user = db.relationship('User', uselist = False)
+	eth = db.relationship('Ethnicity', uselist = False)
 
 	def __repr__(self):
 		return '<{} {}>'.format(self.first_name,self.last_name)
@@ -99,13 +122,17 @@ class ContactType(db.Model):
 class ClientAddress(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	address = db.Column(db.String(50))
-	zipcode = db.Column(db.Integer)
+	address_2 = db.Column(db.String(50))
+	city = db.Column(db.String(30))
+	state = db.Column(db.String(30))
+	zipcode = db.Column(db.String(5))
 	start_date = db.Column(db.DateTime)
 	end_date = db.Column(db.DateTime)
 	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
 	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
 	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
 	user = db.relationship('User', uselist = False)
+
 
 
 class Gender(db.Model):
@@ -119,7 +146,6 @@ class Gender(db.Model):
 class Ethnicity(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	ethnicity = db.Column(db.String(30))
-	client = db.relationship('Client', backref = 'Ethnicity', lazy = 'dynamic')
 
 	def __repr__(self):
 		return '<Ethnicity {}>'.format(self.ethnicity)

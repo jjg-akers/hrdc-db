@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="" method="post">
+            {{ form.hidden_tag() }}
+   <div class="formFields readonly">
+        <div class="formElement">
+            {{ form.created_by.label }}
+            {{ form.created_by(readonly=True) }}
+        </div>
+        <div class="formElement">
+            {{ form.client_id.label }}
+            {{ form.client_id(readonly=True) }}
+        </div>
+   </div>
+
+   <div class="formFields">
+        <div class="formElement">
+            {{ form.address.label }}
+            {{ form.address }}
+        </div>
+        <div class="formElement">
+            {{ form.address_2.label }}
+            {{ form.address_2 }}
+        </div>
+        <div class="formElement">
+            {{ form.zipcode.label }}
+            {{ form.zipcode }}
+        </div>
+        <div class="formElement">
+            {{ form.city.label }}
+            {{ form.city }}
+        </div>
+        <div class="formElement">
+            {{ form.state.label }}
+            {{ form.state }}
+        </div>
+   </div>
+   <div class="formFields">
+        <div class="formElement">
+            {{ form.start_date.label }}
+            {{ form.start_date }}
+        </div>
+        <div class="formElement">
+            {{ form.end_date.label }}
+            {{ form.end_date }}
+        </div>
+        <div class="formElement">
+            {{ form.submit }}
+        </div>
+   </div>
+</form>
+<div class="formFields">
+<div class="showRecord">
+        <div class="formElement">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Address</th>
+                    <th>Begin Date</th>
+                    <th>End Date</th>
+                    <th>Created By</th>
+                </tr>
+                {% for d in data %}
+                <tr>
+                    <td>{{ d.id }}</td>
+                    <td>{{ d.address }}</td>
+                    <td>{{ d.start_date }}</td>
+                    <td>{{ d.end_date }}</td>
+                    <td>{{ d.user.username }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

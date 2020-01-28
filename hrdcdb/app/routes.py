@@ -1,13 +1,12 @@
-from flask import render_template, flash, redirect, url_for, request
+import pdfkit
+import os
+from flask import render_template, flash, redirect, url_for, request, jsonify, send_file, make_response
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from app.forms import *
 from app.models import *
-
-
-# This line is put in to test branch switching
-# It should only appear in the serv branch
+from app.kiosk import checkin_to_db
 
 @app.route('/login', methods = ['GET','POST'])
 def login():
@@ -26,10 +25,12 @@ def login():
 		return redirect(next_page)
 	return render_template('login.html', title = 'Sign In', form = form)
 
+
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
 
 @app.route('/')
 @app.route('/index')
@@ -90,10 +91,15 @@ def render_form(form):
 	return render_template('form_view.html', title = instance.form_title, form = instance)
 
 
-@app.route('/find_clients', methods = ['GET', 'POST'])
+@app.route('/find_clients_<client_data>', defaults = {'client_data':None}, methods = ['GET','POST'])
+@app.route('/find_clients_<client_data>', methods = ['GET', 'POST'])
 @login_required
-def view_clients():
-	form = FilterClients()
+def view_clients(client_data = None):
+	if client_data != 'None':
+		search_data = Kiosk.query.filter(Kiosk.id == client_data).first()
+		form = FilterClients(data = search_data.__dict__)
+	else:
+		form = FilterClients()
 	if form.validate_on_submit():
 		clients = Client.query
 		if form.first_name.data:
@@ -111,9 +117,14 @@ def client_dashboard(clientid):
 	relations = ClientRelationship.query.filter(ClientRelationship.client_a_id == clientid).all()
 
 	contact_info = ClientContact.query.filter(ClientContact.client_id == clientid).all()
+	try:
+		address = ClientAddress.query.filter(ClientAddress.client_id == clientid).all()[-1]
+	except IndexError:
+		address = None
 	return render_template('client_dashboard.html', 
 							title = '{} {} Dashboard'.format(client.first_name, client.last_name),
-							client = client, relations = relations, contact_info = contact_info)
+							client = client, relations = relations, contact_info = contact_info,
+							address = address)
 
 
 @app.route('/client_<clientid>_contact', methods = ['GET', 'POST'])
@@ -223,3 +234,44 @@ def add_service(clientid):
 		db.session.commit()
 		return redirect(url_for('add_service', clientid = clientid))
 	return render_template('add_service.html', title = 'Add Service', form = form, data = services)
+
+
+@app.route('/client_checkin', methods = ['GET','POST'])
+def client_checkin():
+	checkin_to_db()
+	lobby = Kiosk.query.all()
+	return render_template('client_checkin.html', lobby = lobby)
+
+
+@app.route('/universal_form_<clientid>', methods = ['GET','POST'])
+def universal_form(clientid):
+	client = Client.query.filter(Client.id == clientid).first()
+	try:
+		address = ClientAddress.query.filter(ClientAddress.client_id == clientid).all()[-1]
+	except IndexError:
+		address = None
+	cell = ClientContact.query.filter(ClientContact.client_id == clientid).filter(ClientContact.contact_type == 3).first()
+	email = ClientContact.query.filter(ClientContact.client_id == clientid).filter(ClientContact.contact_type == 5).first()
+	work = ClientContact.query.filter(ClientContact.client_id == clientid).filter(ClientContact.contact_type == 1).first()
+	rendered_form = render_template('universal_form.html', 
+						   client = client, address = address,
+						   cell = cell, email = email, work = work)
+	path = os.path.dirname(os.path.realpath(__file__))
+	pdf = pdfkit.from_string(rendered_form, False, css = '{}\\static\\styles\\universal_form.css'.format(path))
+
+	response = make_response(pdf)
+	response.headers['Content-Type'] = 'application/pdf'
+	response.headers['Content-Disposition'] = 'inline; output.pdf'
+
+	return response
+
+
+@app.route('/add_address_<clientid>', methods = ['GET','POST'])
+def add_address(clientid):
+	history = ClientAddress.query.filter(ClientAddress.client_id == clientid).all()
+	prefill = {'client_id':clientid,'created_by':current_user.id}
+	form = CreateClientAddress(data = prefill)
+	if form.validate_on_submit():
+		form.execute_transaction()
+		return redirect(url_for('add_address', clientid=clientid))
+	return render_template('add_address.html', title = form.form_title, form = form, data = history)

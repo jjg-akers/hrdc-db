@@ -1,7 +1,7 @@
 from flask import redirect, url_for
 from flask_wtf import FlaskForm
 from wtforms.fields.html5 import DateField
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField, FieldList, FormField
+from wtforms import IntegerField, StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField, FieldList, FormField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Optional, Regexp
 from app.models import *
 from app import db
@@ -104,6 +104,7 @@ class FilterClients(FlaskForm):
 	first_name = StringField('First Name')
 	middle_name = StringField('Middle Name')
 	last_name = StringField('Last Name')
+	dob = DateField('Date of Birth', format='%Y-%m-%d', validators=[Optional()])
 	SSN = StringField('Social Security #')
 
 	exact_match = BooleanField('Require Exact Match')
@@ -125,6 +126,32 @@ class CreateClientContact(FlaskForm):
 									contact_type = self.contact_type.data)
 		db.session.add(new_contact)
 		db.session.commit()
+
+
+class CreateClientAddress(FlaskForm):
+	form_title = 'Add Address'
+
+	created_by = IntegerField('User ID', validators = [DataRequired()])
+	client_id = IntegerField('Client ID', validators = [DataRequired()])
+	address = StringField('Address', validators = [DataRequired()])
+	address_2 = StringField('Line Two', validators = [Optional()])
+	zipcode = StringField('Zip Code', validators = [DataRequired()])
+	city = StringField('City', validators = [DataRequired()])
+	state = StringField('State', validators = [DataRequired()])
+
+	start_date = DateField('Start Date', format = '%Y-%m-%d', validators = [DataRequired()])
+	end_date = DateField('End Date', format = '%Y-%m-%d', validators = [DataRequired()])
+
+	submit = SubmitField('Add Address')
+
+	def execute_transaction(self):
+		new_address = ClientAddress(address = self.address.data, address_2 = self.address_2.data, zipcode = self.zipcode.data,
+									city = self.city.data, state = self.state.data,
+									start_date = self.start_date.data, end_date = self.end_date.data,
+									client_id = self.client_id.data, created_by = self.created_by.data)
+		db.session.add(new_address)
+		db.session.commit()
+
 
 
 class CreateRelationship(FlaskForm):

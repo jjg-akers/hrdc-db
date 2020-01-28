@@ -15,10 +15,11 @@
             {% if current_user.is_anonymous %}
             <a class="header_button" href="{{ url_for('login') }}">Login</a>
             {% else %}
+            <a class="header_button" href="{{ url_for('client_checkin') }}">Kiosk</a>
             <a class="header_button" href="{{ url_for('index') }}">Home</a>
             <a class="header_button" href="{{ url_for('render_form', form = 'RegistrationForm') }}">Create New User</a>
             <a class="header_button" href="{{ url_for('create_client') }}">Create New Client</a>
-            <a class="header_button" href="{{ url_for('view_clients') }}">Find Client</a>
+            <a class="header_button" href="{{ url_for('view_clients', client_data = 'None') }}">Find Client</a>
             <a class="header_button" href="{{ url_for('add_record', record_type = 'ServiceType') }}">Add Service Type</a>
             <a class="header_button" href="{{ url_for('add_record', record_type = 'Program') }}">Add Program</a>
             <a class="header_button" href="{{ url_for('logout') }}">Logout</a>
