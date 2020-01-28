@@ -2,15 +2,20 @@
 
 This is my project to create an alternative to CaseWorthy. I'm going to use Python Flask to build the forms and interface logic, and SQLAlchemy to build the database logic.
 
-## Current Version: 0.2
+## Current Version: 0.3
 
 The current 'stable' version has a few core features:
 
+
+- Check-in Kiosk
+  - Customers enter information to a Google Form on a laptop/iPad in the lobby
+  - Google Form information is piped into the database
 - Clients
   - Create and update
   - Search
   - Add contact information
   - Add relationships between clients
+  - Add address informatoin
 - Services
   - Create programs and service types
   - Add services to a client
