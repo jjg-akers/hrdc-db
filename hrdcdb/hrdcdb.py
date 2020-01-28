@@ -19,4 +19,5 @@ def make_shell_context():
 			'ServiceType': ServiceType,
 			'Program': Program,
 			'ProgramServiceType': ProgramServiceType,
-			'Kiosk': Kiosk}
+			'Kiosk': Kiosk,
+			'CityZip':CityZip}

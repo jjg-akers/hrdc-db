@@ -3,6 +3,11 @@
 {% block content %}
     <div class="demogFields">
         <div class="formElement">
+            <a href="{{ url_for('universal_form', clientid = client.id)}}" class="dash_button">Print Universal Form</a>
+        </div>
+    </div>
+    <div class="formFields">
+        <div class="formElement">
             <h2>Client Demographics</h2>
             <table>
                 <tr>
@@ -22,11 +27,25 @@
         </div>
         <div class="formElement">
             <h2>Address</h2>
-            <a href="{{ url_for('edit_client', clientid = client.id)}}" class="dash_button">Edit Address History</a>
+            {% if address %}
+            <table>
+                <tr>
+                    <td>{{ address.address }}</td>
+                </tr>
+                <tr>
+                    <td>{{ address.address_2 }}</td>
+                </tr>
+                <tr>
+                    <td>{{ address.city }}</td>
+                </tr>
+                <tr>
+                    <td>{{ address.state }}</td>
+                </tr>
+            </table>
+            {% endif %}
+            <a href="{{ url_for('add_address', clientid = client.id)}}" class="dash_button">Add Address</a>
         </div>
-        <div class="formElement">
-            <a href="{{ url_for('universal_form', clientid = client.id)}}" class="dash_button">Print Universal Form</a>
-        </div>
+        
     </div>
 
 

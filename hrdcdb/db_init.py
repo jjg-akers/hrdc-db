@@ -1,3 +1,4 @@
+import pandas as pd
 from app import app, db
 from app.models import *
 
@@ -34,12 +35,12 @@ ProgramServiceType.query.delete()
 
 
 # Uncomment this section to drop all client data
-Client.query.delete()
-ClientRelationship.query.delete()
-ClientAddress.query.delete()
-ClientContact.query.delete()
-ClientRace.query.delete()
-Kiosk.query.delete()
+# Client.query.delete()
+# ClientRelationship.query.delete()
+# ClientAddress.query.delete()
+# ClientContact.query.delete()
+# ClientRace.query.delete()
+# Kiosk.query.delete()
 
 db.session.commit()
 
@@ -70,5 +71,9 @@ for s in service_types:
 for p in programs:
 	cur = Program(name = p)
 	db.session.add(cur)
+
+# zips = pd.read_csv('zip_data.csv', dtype = {'zipcode':str})
+# zips['id'] = zips.index
+# zips.to_sql('city_zip', con = db.engine, if_exists='append', index = False)
 
 db.session.commit()

@@ -1,5 +1,6 @@
-import ast
-from flask import render_template, flash, redirect, url_for, request, jsonify
+import pdfkit
+import os
+from flask import render_template, flash, redirect, url_for, request, jsonify, send_file, make_response
 from werkzeug.urls import url_parse
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
@@ -116,9 +117,14 @@ def client_dashboard(clientid):
 	relations = ClientRelationship.query.filter(ClientRelationship.client_a_id == clientid).all()
 
 	contact_info = ClientContact.query.filter(ClientContact.client_id == clientid).all()
+	try:
+		address = ClientAddress.query.filter(ClientAddress.client_id == clientid).all()[-1]
+	except IndexError:
+		address = None
 	return render_template('client_dashboard.html', 
 							title = '{} {} Dashboard'.format(client.first_name, client.last_name),
-							client = client, relations = relations, contact_info = contact_info)
+							client = client, relations = relations, contact_info = contact_info,
+							address = address)
 
 
 @app.route('/client_<clientid>_contact', methods = ['GET', 'POST'])
@@ -240,10 +246,32 @@ def client_checkin():
 @app.route('/universal_form_<clientid>', methods = ['GET','POST'])
 def universal_form(clientid):
 	client = Client.query.filter(Client.id == clientid).first()
-	address = ClientAddress.query.filter(ClientAddress.client_id == clientid).first()
+	try:
+		address = ClientAddress.query.filter(ClientAddress.client_id == clientid).all()[-1]
+	except IndexError:
+		address = None
 	cell = ClientContact.query.filter(ClientContact.client_id == clientid).filter(ClientContact.contact_type == 3).first()
 	email = ClientContact.query.filter(ClientContact.client_id == clientid).filter(ClientContact.contact_type == 5).first()
 	work = ClientContact.query.filter(ClientContact.client_id == clientid).filter(ClientContact.contact_type == 1).first()
-	return render_template('universal_form.html', 
+	rendered_form = render_template('universal_form.html', 
 						   client = client, address = address,
 						   cell = cell, email = email, work = work)
+	path = os.path.dirname(os.path.realpath(__file__))
+	pdf = pdfkit.from_string(rendered_form, False, css = '{}\\static\\styles\\universal_form.css'.format(path))
+
+	response = make_response(pdf)
+	response.headers['Content-Type'] = 'application/pdf'
+	response.headers['Content-Disposition'] = 'inline; output.pdf'
+
+	return response
+
+
+@app.route('/add_address_<clientid>', methods = ['GET','POST'])
+def add_address(clientid):
+	history = ClientAddress.query.filter(ClientAddress.client_id == clientid).all()
+	prefill = {'client_id':clientid,'created_by':current_user.id}
+	form = CreateClientAddress(data = prefill)
+	if form.validate_on_submit():
+		form.execute_transaction()
+		return redirect(url_for('add_address', clientid=clientid))
+	return render_template('add_address.html', title = form.form_title, form = form, data = history)

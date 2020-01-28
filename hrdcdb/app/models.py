@@ -122,21 +122,17 @@ class ContactType(db.Model):
 class ClientAddress(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	address = db.Column(db.String(50))
-	zipcode = db.Column(db.Integer, db.ForeignKey('city_zip.zipcode'))
+	address_2 = db.Column(db.String(50))
+	city = db.Column(db.String(30))
+	state = db.Column(db.String(30))
+	zipcode = db.Column(db.String(5))
 	start_date = db.Column(db.DateTime)
 	end_date = db.Column(db.DateTime)
 	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
 	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
 	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
 	user = db.relationship('User', uselist = False)
-	cityzip = db.relationship('CityZip', uselist = False)
 
-
-class CityZip(db.Model):
-	id = db.Column(db.Integer, primary_key = True)
-	zipcode = db.Column(db.Integer)
-	city = db.Column(db.String(30))
-	state = db.Column(db.String(2))
 
 
 class Gender(db.Model):
