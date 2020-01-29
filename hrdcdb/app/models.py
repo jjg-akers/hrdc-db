@@ -134,7 +134,6 @@ class ClientAddress(db.Model):
 	user = db.relationship('User', uselist = False)
 
 
-
 class Gender(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	gender = db.Column(db.String(10))
@@ -223,13 +222,51 @@ class ProgramServiceType(db.Model):
 ##########################################################
 
 
-# class Assessment(db.Model):
-# 	id = db.Column(db.Integer, primary_key = True)
-# 	assessment_type = db.Column(db.Integer, db.ForeignKey('assessmenttype.id'))
-# 	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
-# 	program_id = db.Column(db.Integer, db.ForeignKey('program.id'))
-# 	user_id = db.Column(db.Integer, db.ForeignKey('client.id'))
-# 	assessment_date = db.Column(db.DateTime)
+class Assessment(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	assess_type_id = db.Column(db.Integer, db.ForeignKey('assessment_type.id'))
+	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+	program_id = db.Column(db.Integer, db.ForeignKey('program.id'))
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	assessment_date = db.Column(db.DateTime, default = datetime.utcnow)
+
+	assess_type = db.relationship('AssessmentType', uselist = False)
+	client = db.relationship('Client', uselist = False)
+	user = db.relationship('User', uselist = False)
+	program = db.relationship('Program', uselist = False)
+
+
+class OutcomeMatrix(db.Model):
+	id = db.Column(db.Integer, db.ForeignKey('assessment.id'), primary_key = True)
+	housing = db.Column(db.Integer)
+	transportation = db.Column(db.Integer)
+	education = db.Column(db.Integer)
+	employment = db.Column(db.Integer)
+	childcare = db.Column(db.Integer)
+	income = db.Column(db.Integer)
+
+
+class OutcomeDomainLevels(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	domain = db.Column(db.String(20))
+	score = db.Column(db.Integer)
+	score_description = db.Column(db.String(50))
+
+
+class HousingAssessment(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	status_id = db.Column(db.Integer, db.ForeignKey('housing_status.id'))
+	status = db.relationship('HousingStatus', uselist = False)
+
+
+class HousingStatus(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	status = db.Column(db.String(20))
+
+
+class AssessmentType(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	assess_type = db.Column(db.String(20))
 
 
 # class FinancialAssessment(db.Model):
@@ -249,14 +286,8 @@ class ProgramServiceType(db.Model):
 # 	amount = db.Column(db.Integer)
 
 
-# class HousingAssessment(db.Model):
-# 	id = db.Column(db.Integer, primary_key = True)
-# 	# This will be filled in with columns that represent housing assessment questions
 
 
-# class OutcomeMatrix(db.Model):
-# 	id = db.Column(db.Integer, primary_key = True)
-# 	# This will be filled in with columns for each outcome matrix domain
 
 
 # class NonCashBenefits(db.Model):

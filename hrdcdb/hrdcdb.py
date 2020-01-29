@@ -20,4 +20,9 @@ def make_shell_context():
 			'Program': Program,
 			'ProgramServiceType': ProgramServiceType,
 			'Kiosk': Kiosk,
-			'CityZip':CityZip}
+			'Assessment':Assessment,
+			'OutcomeMatrix':OutcomeMatrix,
+			'OutcomeDomainLevels':OutcomeDomainLevels,
+			'HousingAssessment':HousingAssessment,
+			'HousingStatus':HousingStatus,
+			'AssessmentType':AssessmentType}
