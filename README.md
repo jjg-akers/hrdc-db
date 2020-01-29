@@ -4,9 +4,7 @@ This is my project to create an alternative to CaseWorthy. I'm going to use Pyth
 
 ## Current Branch Projects
 
-- Add outcome matrix functionality
-  - Domains
-  - Scores at time
+This branch is to merge into before merging into master
 
 ## Current Version: 0.3
 
