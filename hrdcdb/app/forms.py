@@ -262,8 +262,20 @@ class CreateService(FlaskForm):
 	program_choices = [(p.id, p.name) for p in Program.query.all()]
 	ServiceType_choices = [(st.id, st.name) for st in ServiceType.query.all()]
 
+	client_id = IntegerField('ClientID')
+	created_by = IntegerField('UserID')
 	program = SelectField('Program', choices = program_choices, coerce = int)
 	service_type = SelectField('Service Type', choices = ServiceType_choices, coerce = int)
 	begin_date = DateField('Begin Date', format='%Y-%m-%d')
 	end_date = DateField('End Date', format='%Y-%m-%d')
 	submit = SubmitField('Add Service')
+
+	def execute_transaction(self):
+		new_service = Service(service_type_id = self.service_type.data,
+							  client_id = self.client_id.data,
+							  program_id = self.program.data,
+							  created_by = self.created_by.data,
+							  begin_date = self.begin_date.data,
+							  end_date = self.end_date.data)
+		db.session.add(new_service)
+		db.session.commit()

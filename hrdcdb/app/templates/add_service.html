@@ -11,12 +11,21 @@
                 <div class="formElement">
                 	{% if field.type == 'SubmitField' %}
 	                	<center>{{ field() }}</center>
+
+                    {% elif field.type == 'IntegerField' %}
+                        <strong>{{ field.label() }}:</strong>
+                        {{ field(readonly = True) }} <br>
+                        {% for error in field.errors %}
+                            <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+
                 	{% else %}
 	                    <strong>{{ field.label() }}:</strong>
 	                    {{ field() }} <br>
 	                    {% for error in field.errors %}
 	                    	<span style="color: red;">[{{ error }}]</span>
 	                    {% endfor %}
+
                     {% endif %}
                 </div>
                 {% endif %}

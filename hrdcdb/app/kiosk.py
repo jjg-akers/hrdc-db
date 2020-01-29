@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from datetime import datetime
 import gspread
@@ -7,7 +8,8 @@ from app.models import *
 
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
-creds = ServiceAccountCredentials.from_json_keyfile_name('C:/work/client_secret.json', scope)
+path = os.path.dirname(os.path.realpath(__file__))
+creds = ServiceAccountCredentials.from_json_keyfile_name('{}\\client_secret.json'.format(path), scope)
 client = gspread.authorize(creds)
 
 # sheet = client.open_by_key('1Yo4ibOuL5mFcHOuYrJ-tEuEI93HuS5zGptua_sakugs')

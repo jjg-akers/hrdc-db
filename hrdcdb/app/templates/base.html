@@ -23,12 +23,15 @@
             <a class="header_button" href="{{ url_for('add_record', record_type = 'ServiceType') }}">Add Service Type</a>
             <a class="header_button" href="{{ url_for('add_record', record_type = 'Program') }}">Add Program</a>
             <a class="header_button" href="{{ url_for('logout') }}">Logout</a>
+            current user: {{ current_user.username }} <br>
+            user_id: {{ current_user.id }} <br>
             {% endif %}
           </div>
 
           <div class="rightColumn">
-            current user: {{ current_user.username }} <br>
-            user_id: {{ current_user.id }} <br>
+            {% if cid %}
+            <a class="button" href="{{ url_for('client_dashboard', clientid = cid) }}">Return to Dashboard</a>
+            {% endif %}
             {% block content %}{% endblock %}
           </div>
 

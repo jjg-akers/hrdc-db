@@ -142,7 +142,7 @@ def create_contact(clientid):
 		db.session.add(new_contact)
 		db.session.commit()
 		return redirect(url_for('create_contact', clientid = clientid))
-	return render_template('create_contact.html', title = 'Create Contact', form = form, contact_info = contact_info)
+	return render_template('create_contact.html', title = 'Create Contact', form = form, contact_info = contact_info, cid = clientid)
 
 
 @app.route('/create_relationship_<clientid>', defaults = {'second_client':None}, methods = ['GET','POST'])
@@ -185,7 +185,7 @@ def create_relationship(clientid, second_client):
 		db.session.add(back_rel)
 		db.session.commit()
 		return redirect(url_for('create_relationship', clientid = clientid))
-	return render_template('create_relationship.html', title = 'Create Relationship', data = rels, form = form)	
+	return render_template('create_relationship.html', title = 'Create Relationship', data = rels, form = form, cid = clientid)	
 
 
 @app.route('/edit_client_<clientid>', methods = ['GET','POST'])
@@ -204,7 +204,7 @@ def edit_client(clientid):
 		client.gender = form.gender.data
 		client.ethnicity = form.ethnicity.data
 		db.session.commit()
-	return render_template('form_view.html', form = form)
+	return render_template('form_view.html', form = form, cid = clientid)
 
 
 # record_type is the name of the model as a string
@@ -224,18 +224,12 @@ def add_record(record_type):
 @app.route('/add_Service_<clientid>', methods = ['GET','POST'])
 def add_service(clientid):
 	services = Service.query.filter(Service.client_id == clientid).all()
-	form = CreateService()
+	prefill = {'client_id':clientid,'created_by':current_user.id}
+	form = CreateService(data = prefill)
 	if form.validate_on_submit():
-		new_service = Service(service_type_id = form.service_type.data,
-							  client_id = clientid,
-							  program_id = form.program.data,
-							  created_by = current_user.id,
-							  begin_date = form.begin_date.data,
-							  end_date = form.end_date.data)
-		db.session.add(new_service)
-		db.session.commit()
+		form.execute_transaction()
 		return redirect(url_for('add_service', clientid = clientid))
-	return render_template('add_service.html', title = 'Add Service', form = form, data = services)
+	return render_template('add_service.html', title = 'Add Service', form = form, data = services, cid = clientid)
 
 
 @app.route('/client_checkin', methods = ['GET','POST'])
@@ -276,7 +270,7 @@ def add_address(clientid):
 	if form.validate_on_submit():
 		form.execute_transaction()
 		return redirect(url_for('add_address', clientid=clientid))
-	return render_template('add_address.html', title = form.form_title, form = form, data = history)
+	return render_template('add_address.html', title = form.form_title, form = form, data = history, cid = clientid)
 
 
 @app.route('/add_assessment_<clientid>', methods = ['GET','POST'])
@@ -286,4 +280,4 @@ def add_assessment(clientid):
 	if form.validate_on_submit():
 		form.execute_transaction()
 		return redirect(url_for('client_dashboard', clientid = clientid))
-	return render_template('add_om_score.html', form = form)
+	return render_template('add_om_score.html', form = form, cid = clientid)
