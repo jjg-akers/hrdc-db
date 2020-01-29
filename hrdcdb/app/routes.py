@@ -118,6 +118,7 @@ def client_dashboard(clientid):
 
 	contact_info = ClientContact.query.filter(ClientContact.client_id == clientid).all()
 	services = Service.query.filter(Service.client_id == clientid).all()
+	assessments = Assessment.query.filter(Assessment.client_id == clientid).all()
 	try:
 		address = ClientAddress.query.filter(ClientAddress.client_id == clientid).all()[-1]
 	except IndexError:
@@ -125,7 +126,7 @@ def client_dashboard(clientid):
 	return render_template('client_dashboard.html', 
 							title = '{} {} Dashboard'.format(client.first_name, client.last_name),
 							client = client, relations = relations, contact_info = contact_info,
-							address = address, services = services)
+							address = address, services = services, assessments = assessments)
 
 
 @app.route('/client_<clientid>_contact', methods = ['GET', 'POST'])
@@ -276,3 +277,13 @@ def add_address(clientid):
 		form.execute_transaction()
 		return redirect(url_for('add_address', clientid=clientid))
 	return render_template('add_address.html', title = form.form_title, form = form, data = history)
+
+
+@app.route('/add_assessment_<clientid>', methods = ['GET','POST'])
+def add_assessment(clientid):
+	prefill = {'client_id':clientid,'created_by':current_user.id}
+	form = OMAssessment(data = prefill)
+	if form.validate_on_submit():
+		form.execute_transaction()
+		return redirect(url_for('client_dashboard', clientid = clientid))
+	return render_template('add_om_score.html', form = form)

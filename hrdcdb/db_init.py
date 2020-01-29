@@ -92,6 +92,10 @@ Program.query.delete()
 ProgramServiceType.query.delete()
 Service.query.delete()
 AssessmentType.query.delete()
+Assessment.query.delete()
+OutcomeMatrix.query.delete()
+HousingStatus.query.delete()
+HousingAssessment.query.delete()
 
 
 # Uncomment this section to drop all client data

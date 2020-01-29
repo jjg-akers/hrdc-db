@@ -1,7 +1,9 @@
+import sys
+import datetime
 from flask import redirect, url_for
 from flask_wtf import FlaskForm
 from wtforms.fields.html5 import DateField
-from wtforms import IntegerField, StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField, FieldList, FormField
+from wtforms import RadioField, IntegerField, StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SelectField, FieldList, FormField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Optional, Regexp
 from app.models import *
 from app import db
@@ -153,7 +155,6 @@ class CreateClientAddress(FlaskForm):
 		db.session.commit()
 
 
-
 class CreateRelationship(FlaskForm):
 	form_title = 'Create Relationship'
 
@@ -216,26 +217,43 @@ class OMAssessment(FlaskForm):
 	created_by = IntegerField('User ID', validators = [DataRequired()])
 	client_id = IntegerField('Client ID', validators = [DataRequired()])
 
+	program_choices = [(p.id, p.name) for p in Program.query.all()]
+	program = SelectField('Program Collecting Score', choices = program_choices, coerce = int)
 
 	hou_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'housing').all()]
-	housing = SelectField('Housing Score', choices = hou_choices, coerce = int)
+	housing = RadioField('Housing Score', choices = hou_choices, coerce = int)
 
 	tran_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'transportation').all()]
-	transportation = SelectField('Transportation Score', choices = tran_choices, coerce = int)
+	transportation = RadioField('Transportation Score', choices = tran_choices, coerce = int)
 
 	edu_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'education').all()]
-	education = SelectField('Education Score', choices = edu_choices, coerce = int)
+	education = RadioField('Education Score', choices = edu_choices, coerce = int)
 
 	emp_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'employment').all()]
-	employment = SelectField('Employment Score', choices = emp_choices, coerce = int)
+	employment = RadioField('Employment Score', choices = emp_choices, coerce = int)
 
 	cc_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'childcare').all()]
-	childcare = SelectField('Childcare Score', choices = cc_choices, coerce = int)
+	childcare = RadioField('Childcare Score', choices = cc_choices, coerce = int)
 
 	inc_choices = [(odl.score, odl.score_description) for odl in OutcomeDomainLevels.query.filter_by(domain = 'income').all()]
-	income = SelectField('Income Score', choices = inc_choices, coerce = int)
+	income = RadioField('Income Score', choices = inc_choices, coerce = int)
 
 	submit = SubmitField('Complete Assessment')
+
+	def execute_transaction(self):
+		print('here I am, executing the transaction...', file = sys.stderr)
+		new_assessment = Assessment(assess_type_id = 1, client_id = self.client_id.data, program_id = self.program.data,
+							  		user_id = self.created_by.data, assessment_date = datetime.utcnow())
+		db.session.add(new_assessment)
+		db.session.flush()
+
+		new_id = new_assessment.id
+		print('New ID: {}'.format(new_id), file = sys.stderr)
+		new_om = OutcomeMatrix(id = new_id, housing = self.housing.data, transportation = self.transportation.data,
+							   education = self.education.data, employment = self.employment.data, childcare = self.childcare.data,
+							   income = self.income.data)
+		db.session.add(new_om)
+		db.session.commit()
 
 
 class CreateService(FlaskForm):

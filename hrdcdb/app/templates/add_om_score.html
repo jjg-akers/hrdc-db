@@ -3,46 +3,47 @@
 {% block content %}
 
 <form action="" method="post">
-            {{ form.hidden_tag() }}
-   <div class="formFields readonly">
-        <div class="formElement">
-            {{ form.created_by.label }}
-            {{ form.created_by(readonly=True) }}
-        </div>
-        <div class="formElement">
-            {{ form.client_id.label }}
-            {{ form.client_id(readonly=True) }}
-        </div>
-   </div>
-
-   <div class="formFields">
-        <div class="formElement">
-            {{ form.housing.label }}
-            {{ form.housing }}
-        </div>
-        <div class="formElement">
-            {{ form.transportation.label }}
-            {{ form.transportation }}
-        </div>
-        <div class="formElement">
-            {{ form.education.label }}
-            {{ form.education }}
-        </div>
-        <div class="formElement">
-            {{ form.employment.label }}
-            {{ form.employment }}
-        </div>
-        <div class="formElement">
-            {{ form.childcare.label }}
-            {{ form.childcare }}
-        </div>
-        <div class="formElement">
-            {{ form.income.label }}
-            {{ form.income }}
-        </div>
-        <div class="formElement">
-            {{ form.submit }}
-        </div>
-   </div>
-</form>
+    {{ form.hidden_tag() }}
+    {{ form.errors }}
+    <table>
+        <tr>
+            <td>{{ form.created_by.label }}</td>
+            <td>{{ form.created_by(readonly=True) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.client_id.label }}</td>
+            <td>{{ form.client_id(readonly=True) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.program.label }}</td>
+            <td>{{ form.program }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.housing.label }}</td>
+            <td>{{ form.housing }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.transportation.label }}</td>
+            <td>{{ form.transportation }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.education.label }}</td>
+            <td>{{ form.education }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.employment.label }}</td>
+            <td>{{ form.employment }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.childcare.label }}</td>
+            <td>{{ form.childcare }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.income.label }}</td>
+            <td>{{ form.income }}</td>
+        </tr>  
+        <tr>
+            <td>{{ form.submit }}</td>
+        </tr>
+   </form>
 {% endblock %}
