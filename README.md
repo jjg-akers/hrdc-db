@@ -2,12 +2,6 @@
 
 This is my project to create an alternative to CaseWorthy. I'm going to use Python Flask to build the forms and interface logic, and SQLAlchemy to build the database logic.
 
-## Current Branch Projects
-
-- Add outcome matrix functionality
-  - Domains
-  - Scores at time
-
 ## Current Version: 0.3
 
 The current 'stable' version has a few core features:
