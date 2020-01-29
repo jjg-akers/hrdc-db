@@ -25,6 +25,8 @@ The current 'stable' version has a few core features:
 - Services
   - Create programs and service types
   - Add services to a client
+- Assessments
+  - Outcome Matrix
 - Users
   - Manage user logins and password hashing
 
