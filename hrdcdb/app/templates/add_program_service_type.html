@@ -11,21 +11,12 @@
                 <div class="formElement">
                 	{% if field.type == 'SubmitField' %}
 	                	<center>{{ field() }}</center>
-
-                    {% elif field.type == 'IntegerField' %}
-                        <strong>{{ field.label() }}:</strong>
-                        {{ field(readonly = True) }} <br>
-                        {% for error in field.errors %}
-                            <span style="color: red;">[{{ error }}]</span>
-                        {% endfor %}
-
                 	{% else %}
 	                    <strong>{{ field.label() }}:</strong>
 	                    {{ field() }} <br>
 	                    {% for error in field.errors %}
 	                    	<span style="color: red;">[{{ error }}]</span>
 	                    {% endfor %}
-
                     {% endif %}
                 </div>
                 {% endif %}
@@ -36,24 +27,15 @@
         <div class="formElement">
             <table>
                 <tr>
-                    <th>Record ID</th>
-                    <th>Client ID</th>
+                    <th>ID</th>
                     <th>Service Type</th>
                     <th>Program</th>
-                    <th>Begin Date</th>
-                    <th>End Date</th>
-                    <th>Created By</th>
                 </tr>
                 {% for d in data %}
                 <tr>
-                    <td class='serviceRecordID'>{{ d.id }}</td>
-                    <td class='clientID'>{{ d.client_id }}</td>
+                    <td>{{ d.id }}</td>
                     <td>{{ d.service_type.name }}</td>
                     <td>{{ d.program.name }}</td>
-                    <td>{{ d.begin_date }}</td>
-                    <td>{{ d.end_date }}</td>
-                    <td>{{ d.user.username }}</td>
-                    <td><button class="delBtn" type="button">Delete</button></td>
                 </tr>
                 {% endfor %}
             </table>

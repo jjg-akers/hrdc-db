@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    {% for e in form.errors %}
+    <span style="color: red;">[{{ e }}]</span>
+    {% endfor %}
+    <table>
+        <tr>
+            <td>{{ form.created_by.label }}</td>
+            <td>{{ form.created_by(readonly=True) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.client_id.label }}</td>
+            <td>{{ form.client_id(readonly=True) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.program.label }}</td>
+            <td>{{ form.program }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.housing.label }}</td>
+            <td>{{ form.housing }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.transportation.label }}</td>
+            <td>{{ form.transportation }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.education.label }}</td>
+            <td>{{ form.education }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.employment.label }}</td>
+            <td>{{ form.employment }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.childcare.label }}</td>
+            <td>{{ form.childcare }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.income.label }}</td>
+            <td>{{ form.income }}</td>
+        </tr>  
+        <tr>
+            <td>{{ form.submit }}</td>
+        </tr>
+   </form>
+{% endblock %}

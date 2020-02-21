@@ -29,6 +29,27 @@ class User(UserMixin, db.Model):
 		return check_password_hash(self.password_hash, password)
 
 
+################################################################
+# The Kiosk model collects data from a customer check-in kiosk #
+################################################################
+
+
+class Kiosk(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	timestamp = db.Column(db.DateTime, index = True)
+	first_name = db.Column(db.String(20))
+	middle_name = db.Column(db.String(20))
+	last_name = db.Column(db.String(20))
+	dob = db.Column(db.Date)
+	SSN = db.Column(db.String(4))
+	seen = db.Column(db.Boolean)
+	cleared = db.Column(db.Boolean)
+
+	def __repr__(self):
+		return '<{} {} check-in>'.format(self.first_name, self.timestamp)
+
+
+
 #################################################################################
 # The Client tables define demographic and family information about each client #
 #################################################################################
@@ -43,14 +64,16 @@ class Client(db.Model):
 	activeMilitary = db.Column(db.Boolean)
 	disability = db.Column(db.Boolean)
 	foreignBorn = db.Column(db.Boolean)
-	race = db.relationship('ClientRace', backref = 'Client', lazy = 'dynamic')
 	ethnicity = db.Column(db.Integer, db.ForeignKey('ethnicity.id'))
 	gender = db.Column(db.Integer, db.ForeignKey('gender.id'))
-	gen = db.relationship('Gender', uselist = False)
 	dob = db.Column(db.Date)
 	created_date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
 	created_by = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+	gen = db.relationship('Gender', uselist = False)
+	race = db.relationship('ClientRace', uselist = False)
 	user = db.relationship('User', uselist = False)
+	eth = db.relationship('Ethnicity', uselist = False)
 
 	def __repr__(self):
 		return '<{} {}>'.format(self.first_name,self.last_name)
@@ -99,7 +122,10 @@ class ContactType(db.Model):
 class ClientAddress(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	address = db.Column(db.String(50))
-	zipcode = db.Column(db.Integer)
+	address_2 = db.Column(db.String(50))
+	city = db.Column(db.String(30))
+	state = db.Column(db.String(30))
+	zipcode = db.Column(db.String(5))
 	start_date = db.Column(db.DateTime)
 	end_date = db.Column(db.DateTime)
 	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
@@ -119,7 +145,6 @@ class Gender(db.Model):
 class Ethnicity(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	ethnicity = db.Column(db.String(30))
-	client = db.relationship('Client', backref = 'Ethnicity', lazy = 'dynamic')
 
 	def __repr__(self):
 		return '<Ethnicity {}>'.format(self.ethnicity)
@@ -197,13 +222,51 @@ class ProgramServiceType(db.Model):
 ##########################################################
 
 
-# class Assessment(db.Model):
-# 	id = db.Column(db.Integer, primary_key = True)
-# 	assessment_type = db.Column(db.Integer, db.ForeignKey('assessmenttype.id'))
-# 	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
-# 	program_id = db.Column(db.Integer, db.ForeignKey('program.id'))
-# 	user_id = db.Column(db.Integer, db.ForeignKey('client.id'))
-# 	assessment_date = db.Column(db.DateTime)
+class Assessment(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	assess_type_id = db.Column(db.Integer, db.ForeignKey('assessment_type.id'))
+	client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+	program_id = db.Column(db.Integer, db.ForeignKey('program.id'))
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+	assessment_date = db.Column(db.DateTime, default = datetime.utcnow)
+
+	assess_type = db.relationship('AssessmentType', uselist = False)
+	client = db.relationship('Client', uselist = False)
+	user = db.relationship('User', uselist = False)
+	program = db.relationship('Program', uselist = False)
+
+
+class OutcomeMatrix(db.Model):
+	id = db.Column(db.Integer, db.ForeignKey('assessment.id'), primary_key = True)
+	housing = db.Column(db.Integer)
+	transportation = db.Column(db.Integer)
+	education = db.Column(db.Integer)
+	employment = db.Column(db.Integer)
+	childcare = db.Column(db.Integer)
+	income = db.Column(db.Integer)
+
+
+class OutcomeDomainLevels(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	domain = db.Column(db.String(20))
+	score = db.Column(db.Integer)
+	score_description = db.Column(db.String(50))
+
+
+class HousingAssessment(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	status_id = db.Column(db.Integer, db.ForeignKey('housing_status.id'))
+	status = db.relationship('HousingStatus', uselist = False)
+
+
+class HousingStatus(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	status = db.Column(db.String(20))
+
+
+class AssessmentType(db.Model):
+	id = db.Column(db.Integer, primary_key = True)
+	assess_type = db.Column(db.String(20))
 
 
 # class FinancialAssessment(db.Model):
@@ -223,14 +286,8 @@ class ProgramServiceType(db.Model):
 # 	amount = db.Column(db.Integer)
 
 
-# class HousingAssessment(db.Model):
-# 	id = db.Column(db.Integer, primary_key = True)
-# 	# This will be filled in with columns that represent housing assessment questions
 
 
-# class OutcomeMatrix(db.Model):
-# 	id = db.Column(db.Integer, primary_key = True)
-# 	# This will be filled in with columns for each outcome matrix domain
 
 
 # class NonCashBenefits(db.Model):

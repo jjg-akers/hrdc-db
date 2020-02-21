@@ -17,4 +17,12 @@ def make_shell_context():
 			'Race': Race,
 			'ClientRace': ClientRace,
 			'ServiceType': ServiceType,
-			'Program': Program}
+			'Program': Program,
+			'ProgramServiceType': ProgramServiceType,
+			'Kiosk': Kiosk,
+			'Assessment':Assessment,
+			'OutcomeMatrix':OutcomeMatrix,
+			'OutcomeDomainLevels':OutcomeDomainLevels,
+			'HousingAssessment':HousingAssessment,
+			'HousingStatus':HousingStatus,
+			'AssessmentType':AssessmentType}
